@@ -5,8 +5,8 @@ export default {
 		textColor: '#ffc233',
 	},
 	fonts: {
-		interThin: 'Inter_100Thin',
-		interBlack: 'Inter_900Black',
-		interMedium: 'Inter_500Medium',
+		interThin: 'Inter-Light',
+		interBlack: 'Inter-Black',
+		interMedium: 'Inter-Medium',
 	},
 };

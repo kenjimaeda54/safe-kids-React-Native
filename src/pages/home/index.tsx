@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {Modalize} from 'react-native-modalize';
 import {
-	Text,
 	NativeEventEmitter,
 	NativeModules,
 	Platform,
@@ -8,31 +8,15 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-interface PeripheralProps {
-	advertising: Advertising;
-	id: string;
-	name: string;
-	rssi: number;
-}
-
-type Advertising = {
-	isConnectable: boolean;
-	localName?: string;
-	manufacturerData: ManufacturerData;
-	serviceData: {};
-	serviceUUIDs: string[];
-	txPowerLevel: number;
-};
-
-type ManufacturerData = {
-	CDVType: string;
-	bytes: number[];
-	data: string;
-};
+import {Container, Title, Body, TextDecoration, TextButton} from './styles';
+import Welcome from '../../assets/welcome.svg';
+import {PeripheralProps} from '../../types';
+import ListBluetooth from '../../components/modal';
 
 export default function Home() {
 	const BleManagerModule = NativeModules.BleManager;
 	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+	const refModal = useRef<Modalize>(null);
 	const [isScanning, setIsScanning] = useState(false);
 
 	const handleScan = () => {
@@ -56,7 +40,10 @@ export default function Home() {
 		if (!peripheral.name) {
 			peripheral.name = 'NO NAME';
 		}
-		console.log(peripheral);
+		const {
+			advertising: {isConnectable},
+		} = peripheral;
+		console.log('e conectavel', isConnectable);
 	};
 
 	useEffect(() => {
@@ -92,8 +79,19 @@ export default function Home() {
 		};
 	});
 	return (
-		<TouchableOpacity onPress={handleScan}>
-			<Text>Ola mundo</Text>
-		</TouchableOpacity>
+		<Container>
+			<Body>
+				<Welcome width={500} height={325} />
+				<Title>
+					Clique em <TextDecoration>Conectar</TextDecoration> para encontrarmos
+					sua pulseira,fique tranquilo,nos notificaremos quando estiver pronto
+					para uso ou ser desconectada
+				</Title>
+			</Body>
+			<TouchableOpacity onPress={handleScan}>
+				<TextButton>Conectar</TextButton>
+			</TouchableOpacity>
+			<ListBluetooth name='' id='' ref={refModal} />
+		</Container>
 	);
 }

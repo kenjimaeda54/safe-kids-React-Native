@@ -1,0 +1,8 @@
+{
+	"replaceAttrValues": {
+		"red": "currentColor"
+	},
+	"plugins": [
+		"@svgr/plugin-svgo"
+	]
+}
