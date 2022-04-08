@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import {RFValue} from 'react-native-responsive-fontsize';
 
 export const Container = styled.View`
 	flex: 1;
@@ -15,11 +16,11 @@ export const Body = styled.View`
 `;
 
 export const Title = styled.Text`
-	margin-top: 12px;
+	margin-top: ${RFValue(20)}px;
 	font-family: ${({theme}) => theme.fonts.interMedium};
-	font-size: 14px;
+	font-size: ${RFValue(14)}px;
 	color: ${({theme}) => theme.colors.textColor};
-	line-height: 26px;
+	line-height: ${RFValue(26)}px;
 	text-align: left;
 	width: 100%;
 `;
@@ -31,8 +32,8 @@ export const TextDecoration = styled(Title)`
 
 export const TextButton = styled.Text`
 	font-family: ${({theme}) => theme.fonts.interBlack};
-	font-size: 17px;
+	font-size: ${RFValue(17)}px;
 	color: ${({theme}) => theme.colors.textColor};
-	line-height: 20px;
+	line-height: ${RFValue(20)}px;
 	text-decoration: underline;
 `;

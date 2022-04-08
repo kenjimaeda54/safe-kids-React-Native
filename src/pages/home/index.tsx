@@ -5,11 +5,12 @@ import {
 	NativeModules,
 	Platform,
 	PermissionsAndroid,
+	Image,
+	TouchableWithoutFeedback,
 	TouchableOpacity,
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import {Container, Title, Body, TextDecoration, TextButton} from './styles';
-import Welcome from '../../assets/welcome.svg';
 import {PeripheralProps} from '../../types';
 import ListBluetooth from '../../components/modal';
 
@@ -20,6 +21,7 @@ export default function Home() {
 	const [isScanning, setIsScanning] = useState(false);
 
 	const handleScan = () => {
+		refModal.current?.open();
 		if (!isScanning) {
 			BleManager.scan([], 3, true)
 				.then(() => {
@@ -35,6 +37,8 @@ export default function Home() {
 		console.log('Scan is stopped');
 		setIsScanning(false);
 	};
+
+  const handleModal =  ()=> refModal.current?.close();
 
 	const handleDiscoverPeripheral = (peripheral: PeripheralProps) => {
 		if (!peripheral.name) {
@@ -79,19 +83,28 @@ export default function Home() {
 		};
 	});
 	return (
-		<Container>
-			<Body>
-				<Welcome width={500} height={325} />
-				<Title>
-					Clique em <TextDecoration>Conectar</TextDecoration> para encontrarmos
-					sua pulseira,fique tranquilo,nos notificaremos quando estiver pronto
-					para uso ou ser desconectada
-				</Title>
-			</Body>
-			<TouchableOpacity onPress={handleScan}>
-				<TextButton>Conectar</TextButton>
-			</TouchableOpacity>
-			<ListBluetooth name='' id='' ref={refModal} />
-		</Container>
+		<TouchableWithoutFeedback onPress={handleModal}  >
+			<Container>
+				<Body>
+					<Image
+						resizeMode='contain'
+						style={{
+							width: 300,
+							height: 300,
+						}}
+						source={require('../../assets/welcome.png')}
+					/>
+					<Title>
+						Clique em <TextDecoration>Conectar</TextDecoration> para
+						encontrarmos sua pulseira,fique tranquilo,nos notificaremos quando
+						estiver pronto para uso ou ser desconectada
+					</Title>
+				</Body>
+				<TouchableOpacity onPress={handleScan}>
+					<TextButton>Conectar</TextButton>
+				</TouchableOpacity>
+				<ListBluetooth name='Tv Sansug' id='erere' ref={refModal} />
+			</Container>
+		</TouchableWithoutFeedback>
 	);
 }
