@@ -1,29 +1,33 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {Context, useEffect, useRef, useState} from 'react';
+import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
 import {
 	NativeEventEmitter,
 	NativeModules,
 	Platform,
 	PermissionsAndroid,
+	Pressable,
 	Image,
 	TouchableWithoutFeedback,
-	TouchableOpacity,
 } from 'react-native';
-import BleManager from 'react-native-ble-manager';
+import BleManager, {Peripheral} from 'react-native-ble-manager';
 import {Container, Title, Body, TextDecoration, TextButton} from './styles';
 import {PeripheralProps} from '../../types';
 import ListBluetooth from '../../components/modal';
 
 export default function Home() {
+	const {colors} = useTheme();
 	const BleManagerModule = NativeModules.BleManager;
 	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 	const refModal = useRef<Modalize>(null);
 	const [isScanning, setIsScanning] = useState(false);
+	const [allPeripherals, setalPeripherals] = useState<PeripheralProps[]>([]);
+	const [isPress, setIsPress] = useState(false);
 
 	const handleScan = () => {
 		refModal.current?.open();
 		if (!isScanning) {
-			BleManager.scan([], 3, true)
+			BleManager.scan([], 15, true)
 				.then(() => {
 					console.log('Scanning...');
 					setIsScanning(true);
@@ -35,19 +39,15 @@ export default function Home() {
 	};
 	const handleStopScan = () => {
 		console.log('Scan is stopped');
-		setIsScanning(false);
 	};
 
-  const handleModal =  ()=> refModal.current?.close();
+	const handleModal = () => refModal.current?.close();
 
 	const handleDiscoverPeripheral = (peripheral: PeripheralProps) => {
 		if (!peripheral.name) {
 			peripheral.name = 'NO NAME';
 		}
-		const {
-			advertising: {isConnectable},
-		} = peripheral;
-		console.log('e conectavel', isConnectable);
+		setalPeripherals((prevState) => [...prevState, peripheral]);
 	};
 
 	useEffect(() => {
@@ -82,8 +82,9 @@ export default function Home() {
 			bleManagerEmitter.removeAllListeners('BleManagerStopScan');
 		};
 	});
+
 	return (
-		<TouchableWithoutFeedback onPress={handleModal}  >
+		<TouchableWithoutFeedback onPress={handleModal}>
 			<Container>
 				<Body>
 					<Image
@@ -100,10 +101,24 @@ export default function Home() {
 						estiver pronto para uso ou ser desconectada
 					</Title>
 				</Body>
-				<TouchableOpacity onPress={handleScan}>
+				<Pressable
+					style={{
+						paddingHorizontal: 5,
+						paddingVertical: 10,
+						opacity: isPress ? 0.5 : 1,
+					}}
+					onPressOut={() => setIsPress(false)}
+					onPressIn={() => setIsPress(true)}
+					hitSlop={{
+						bottom: 50,
+						left: 10,
+						right: 10,
+						top: 50,
+					}}
+					onPress={handleScan}>
 					<TextButton>Conectar</TextButton>
-				</TouchableOpacity>
-				<ListBluetooth name='Tv Sansug' id='erere' ref={refModal} />
+				</Pressable>
+				<ListBluetooth peripherals={allPeripherals} ref={refModal} />
 			</Container>
 		</TouchableWithoutFeedback>
 	);
