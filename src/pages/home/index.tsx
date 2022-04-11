@@ -15,7 +15,14 @@ import {Container, Title, Body, TextDecoration, TextButton} from './styles';
 import {PeripheralProps} from '../../types';
 import ListBluetooth from '../../components/modal';
 
+export type StatesBluetoothProps = {
+	state: string;
+};
+
 export default function Home() {
+	const enableBluetooth = {
+		state: 'off',
+	};
 	const {colors} = useTheme();
 	const BleManagerModule = NativeModules.BleManager;
 	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -23,9 +30,13 @@ export default function Home() {
 	const [isScanning, setIsScanning] = useState(false);
 	const [allPeripherals, setalPeripherals] = useState<PeripheralProps[]>([]);
 	const [isPress, setIsPress] = useState(false);
+	const [statesBluetooth, setStatesBluetooth] =
+		useState<StatesBluetoothProps>(enableBluetooth);
 
 	const handleScan = () => {
 		refModal.current?.open();
+		const {state} = statesBluetooth;
+		if (state === 'off') return;
 		if (!isScanning) {
 			BleManager.scan([], 15, true)
 				.then(() => {
@@ -37,6 +48,12 @@ export default function Home() {
 				});
 		}
 	};
+
+	const handleUpdateStatus = (state: StatesBluetoothProps) => {
+		setStatesBluetooth(state);
+		console.log(state);
+	};
+
 	const handleStopScan = () => {
 		console.log('Scan is stopped');
 	};
@@ -51,7 +68,18 @@ export default function Home() {
 	};
 
 	useEffect(() => {
+		const {state} = statesBluetooth;
+		if (state === 'off') {
+			BleManager.checkState();
+		}
+	}, [statesBluetooth]);
+
+	useEffect(() => {
 		BleManager.start({showAlert: false});
+		bleManagerEmitter.addListener(
+			'BleManagerDidUpdateState',
+			handleUpdateStatus
+		);
 		bleManagerEmitter.addListener(
 			'BleManagerDiscoverPeripheral',
 			handleDiscoverPeripheral
@@ -80,6 +108,7 @@ export default function Home() {
 		return () => {
 			bleManagerEmitter.removeAllListeners('BleManagerDiscoverPeripheral');
 			bleManagerEmitter.removeAllListeners('BleManagerStopScan');
+			bleManagerEmitter.removeAllListeners('BleManagerDidUpdateState');
 		};
 	});
 
@@ -118,7 +147,11 @@ export default function Home() {
 					onPress={handleScan}>
 					<TextButton>Conectar</TextButton>
 				</Pressable>
-				<ListBluetooth peripherals={allPeripherals} ref={refModal} />
+				<ListBluetooth
+					statesBluetooth={statesBluetooth}
+					peripherals={allPeripherals}
+					ref={refModal}
+				/>
 			</Container>
 		</TouchableWithoutFeedback>
 	);

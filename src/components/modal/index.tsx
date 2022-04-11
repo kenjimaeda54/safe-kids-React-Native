@@ -5,6 +5,7 @@ import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
 import {PeripheralProps} from '../../types';
+import {StatesBluetoothProps} from '../../pages/home';
 import {
 	Container,
 	Title,
@@ -12,17 +13,19 @@ import {
 	Body,
 	ButtonConnectBluetooth,
 	ContainerStatus,
+	Alert,
 	ColorSubtitle,
 } from './styles';
 
 interface ListBluetoothProps {
 	peripherals: PeripheralProps[];
+	statesBluetooth: StatesBluetoothProps;
 }
 
 const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
-> = ({peripherals, ...rest}, ref) => {
+> = ({peripherals, statesBluetooth, ...rest}, ref) => {
 	const [namePeripheral, setNamePeripheral] = useState(['']);
 	const {colors} = useTheme();
 
@@ -54,7 +57,12 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 					Dispositivos encontrados
 				</Title>
 				<View>
-					{namePeripheral.length >= 1 ? (
+					{statesBluetooth.state === 'off' ? (
+						<Alert>
+							Observamos que esta com bluetooth desligado,por favor habilite
+							para podermos localizar pulseira{' '}
+						</Alert>
+					) : namePeripheral.length >= 1 ? (
 						namePeripheral.map((name, index) => (
 							<ButtonConnectBluetooth
 								key={index}

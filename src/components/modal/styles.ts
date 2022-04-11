@@ -42,7 +42,14 @@ export const Subtitle = styled.Text`
 `;
 
 export const ColorSubtitle = styled.Text`
-	font-size: ${RFValue(15)}px;
-	line-height: ${RFValue(20)}px;
+	font-size: ${RFValue(18)}px;
+	line-height: ${RFValue(35)}px;
+	color: ${({theme}) => theme.colors.red};
+`;
+
+export const Alert = styled.Text`
+	margin-top: 20px;
+	font-size: ${RFValue(13)}px;
+	line-height: ${RFValue(29)}px;
 	color: ${({theme}) => theme.colors.red};
 `;
