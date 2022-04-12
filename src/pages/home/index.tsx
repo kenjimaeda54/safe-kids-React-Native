@@ -10,7 +10,7 @@ import {
 	Image,
 	TouchableWithoutFeedback,
 } from 'react-native';
-import BleManager, {Peripheral} from 'react-native-ble-manager';
+import BleManager  from 'react-native-ble-manager';
 import {Container, Title, Body, TextDecoration, TextButton} from './styles';
 import {PeripheralProps} from '../../types';
 import ListBluetooth from '../../components/modal';

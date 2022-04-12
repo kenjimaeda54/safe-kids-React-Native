@@ -1,7 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import {TouchableOpacity, View} from 'react-native';
-import BleManager from 'react-native-ble-manager';
+import {NativeModules,NativeEventEmitter,TouchableOpacity, View} from 'react-native';
+import BleManager  from 'react-native-ble-manager';
 import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
@@ -28,19 +28,28 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
 > = ({peripherals, searchingBluetooth, statesBluetooth, ...rest}, ref) => {
+  const BleManagerModule = NativeModules.BleManager
+  const bleManagerEmitter = new NativeEventEmitter(BleManagerModule); 
 	const [peripheral, setPeripheral] = useState<PeripheralProps[]>([]);
 	const [isConnected, setIsConnected] = useState(false);
 	const [tryConnect, setTryConnect] = useState(false);
 	const [listId, setListId] = useState<string[]>([]);
 	const {colors} = useTheme();
 
-	const handlePeripheralSelect = (peripheral: PeripheralProps) => {
+  function handleBound (peripheralId: string) {
+        console.log(peripheralId)
+  }
+
+  function handleConection (peripheral:string)  {
+    console.log(peripheral);
+  }
+
+	const handlePeripheralSelect = async (peripheral: PeripheralProps) => {
 		setTryConnect(true);
-		BleManager.connect(peripheral.id)
-			.then(() => setIsConnected(true))
-			.catch((err) => console.log(err))
-			.finally(() => setTryConnect(false));
+    BleManager.connect(peripheral.id).then(()=>console.log("sucesso")).catch((err)=>err);
 	};
+
+
 	useEffect(() => {
 		peripherals.filter((peripheral) => {
 			if (
