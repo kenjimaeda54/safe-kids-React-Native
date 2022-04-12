@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import {TouchableOpacity, View} from 'react-native';
+import BleManager from 'react-native-ble-manager';
 import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
@@ -20,26 +21,38 @@ import {
 interface ListBluetoothProps {
 	peripherals: PeripheralProps[];
 	statesBluetooth: StatesBluetoothProps;
-  searchingBluetooth:boolean; 
+	searchingBluetooth: boolean;
 }
-
 
 const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
-> = ({peripherals,searchingBluetooth, statesBluetooth, ...rest}, ref) => {
-	const [namePeripheral, setNamePeripheral] = useState(['']);
+> = ({peripherals, searchingBluetooth, statesBluetooth, ...rest}, ref) => {
+	const [peripheral, setPeripheral] = useState<PeripheralProps[]>([]);
+	const [isConnected, setIsConnected] = useState(false);
+	const [tryConnect, setTryConnect] = useState(false);
+	const [listId, setListId] = useState<string[]>([]);
 	const {colors} = useTheme();
 
+	const handlePeripheralSelect = (peripheral: PeripheralProps) => {
+		setTryConnect(true);
+		BleManager.connect(peripheral.id)
+			.then(() => setIsConnected(true))
+			.catch((err) => console.log(err))
+			.finally(() => setTryConnect(false));
+	};
 	useEffect(() => {
-		const availablePeripheral = peripherals.filter((peripheral) => {
-			if (peripheral.advertising.isConnectable === true) {
+		peripherals.filter((peripheral) => {
+			if (
+				peripheral.advertising.isConnectable === true &&
+				!listId.includes(peripheral.id)
+			) {
+				setListId((previous) => [...previous, peripheral.id]);
+				setPeripheral((previous) => [...previous, peripheral]);
 				return peripheral;
 			}
 		});
-		const available = availablePeripheral.map((peripheral) => peripheral.name);
-		setNamePeripheral([...new Set(available)]);
-	}, [setNamePeripheral, peripherals]);
+	}, [setPeripheral, peripherals]);
 
 	return (
 		<Modalize
@@ -64,27 +77,40 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 							Observamos que esta com bluetooth desligado,por favor habilite
 							para podermos localizar pulseira{' '}
 						</Alert>
-					) : namePeripheral.length >= 1 ? (
-						namePeripheral.map((name, index) => (
+					) : peripheral.length >= 1 ? (
+						peripheral.map((peripheral, index) => (
 							<ButtonConnectBluetooth
 								key={index}
-								onPress={() => console.log('ola')}
+								onPress={() => handlePeripheralSelect(peripheral)}
 								activeOpacity={0.7}>
 								<Body>
 									<Subtitle>
-										Nome: <ColorSubtitle>{name}</ColorSubtitle>
+										Nome: <ColorSubtitle>{peripheral.name}</ColorSubtitle>
 									</Subtitle>
 									<ContainerStatus>
-										<Subtitle>
-											Status: <ColorSubtitle>Desconectado</ColorSubtitle>
-										</Subtitle>
+										{tryConnect ? (
+											<Subtitle>Conectando</Subtitle>
+										) : (
+											<Subtitle>
+												Status:{' '}
+												{isConnected ? (
+													<ColorSubtitle>Conectado</ColorSubtitle>
+												) : (
+													<ColorSubtitle>Desconectado</ColorSubtitle>
+												)}
+											</Subtitle>
+										)}
 										<Icon name='bluetooth' size={15} color={colors.red} />
 									</ContainerStatus>
 								</Body>
 							</ButtonConnectBluetooth>
 						))
+					) : searchingBluetooth ? (
+						<Subtitle>Carregando</Subtitle>
 					) : (
-				    searchingBluetooth ? <Subtitle>Carregando</Subtitle> : <Subtitle>Infelizmente não encontramos nenhuma pulseira compatível</Subtitle>
+						<Subtitle>
+							Infelizmente não encontramos nenhuma pulseira compatível
+						</Subtitle>
 					)}
 				</View>
 			</Container>

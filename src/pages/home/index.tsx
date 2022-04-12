@@ -32,17 +32,16 @@ export default function Home() {
 	const [isPress, setIsPress] = useState(false);
 	const [statesBluetooth, setStatesBluetooth] =
 		useState<StatesBluetoothProps>(enableBluetooth);
-  const [isScan,setIsScan] = useState(false)
+  const [searchingBluetooth,setSearchingBluetooth] = useState(false)
 
 	const handleScan = () => {
-    setIsScan(true);
+    setSearchingBluetooth(true);
 		refModal.current?.open();
 		const {state} = statesBluetooth;
 		if (state === 'off') return;
 		if (!isScanning) {
 			BleManager.scan([], 15, true)
 				.then(() => {
-					console.log('Scanning...');
 					setIsScanning(true);
 				})
 				.catch((err) => {
@@ -53,12 +52,9 @@ export default function Home() {
 
 	const handleUpdateStatus = (state: StatesBluetoothProps) => {
 		setStatesBluetooth(state);
-		console.log(state);
 	};
 
-	const handleStopScan = () => {
-		console.log('Scan is stopped');
-	};
+	const handleStopScan = () => 	setSearchingBluetooth(false);
 
 	const handleModal = () => refModal.current?.close();
 
@@ -150,7 +146,7 @@ export default function Home() {
 					<TextButton>Conectar</TextButton>
 				</Pressable>
 				<ListBluetooth
-          isScan={isScan}
+          searchingBluetooth={searchingBluetooth}
 					statesBluetooth={statesBluetooth}
 					peripherals={allPeripherals}
 					ref={refModal}
