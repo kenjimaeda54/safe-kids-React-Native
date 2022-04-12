@@ -20,12 +20,14 @@ import {
 interface ListBluetoothProps {
 	peripherals: PeripheralProps[];
 	statesBluetooth: StatesBluetoothProps;
+  searchingBluetooth:boolean; 
 }
+
 
 const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
-> = ({peripherals, statesBluetooth, ...rest}, ref) => {
+> = ({peripherals,searchingBluetooth, statesBluetooth, ...rest}, ref) => {
 	const [namePeripheral, setNamePeripheral] = useState(['']);
 	const {colors} = useTheme();
 
@@ -82,7 +84,7 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 							</ButtonConnectBluetooth>
 						))
 					) : (
-						<Subtitle>Carregando</Subtitle>
+				    searchingBluetooth ? <Subtitle>Carregando</Subtitle> : <Subtitle>Infelizmente não encontramos nenhuma pulseira compatível</Subtitle>
 					)}
 				</View>
 			</Container>

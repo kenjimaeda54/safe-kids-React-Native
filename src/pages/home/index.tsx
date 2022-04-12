@@ -32,8 +32,10 @@ export default function Home() {
 	const [isPress, setIsPress] = useState(false);
 	const [statesBluetooth, setStatesBluetooth] =
 		useState<StatesBluetoothProps>(enableBluetooth);
+  const [isScan,setIsScan] = useState(false)
 
 	const handleScan = () => {
+    setIsScan(true);
 		refModal.current?.open();
 		const {state} = statesBluetooth;
 		if (state === 'off') return;
@@ -148,6 +150,7 @@ export default function Home() {
 					<TextButton>Conectar</TextButton>
 				</Pressable>
 				<ListBluetooth
+          isScan={isScan}
 					statesBluetooth={statesBluetooth}
 					peripherals={allPeripherals}
 					ref={refModal}
