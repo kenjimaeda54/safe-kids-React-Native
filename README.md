@@ -25,6 +25,6 @@ Precisa liberar instalar aplicativos fora da loja da play store </br>
 
 ##
 ## Como funciona o app
-
+- [Tela inicial]
 
  
