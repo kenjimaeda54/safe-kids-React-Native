@@ -6,6 +6,7 @@ Minizar problema social relacionado ao desparecimento de criancas no mundo
 
 ## Onde consigo o apk para android?
 Ao lado direito voce pode clicar em Releases havera nossas realeases ao longo do desenvolvimento </br>
+[Posivelmente este link vai funcionar](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/releases)</br>
 Gera o dowlound e instala no celular</br>
 
 
