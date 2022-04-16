@@ -30,7 +30,7 @@ Precisa liberar instalar aplicativos fora da loja da play store </br>
 ##
 ## Como funciona o app
 - Tela inicial e subjetiva, idea e apenas orientar os proximos passos a seguir
- [Tela inicial](github_assets/WhatsApp Image 2022-04-16 at 20.28.54(1).jpeg)
+ [Tela inicial](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/blob/909de48007403b6d23b1442778bf660bd0138f7a/github_assets/WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg)
 
 - Modal como as pulseiras  disponiveis, neste modal as pulserias que futuramente serao construidas para o aplicativo serao informadas aqui
 [Dispositivos](github_assets/WhatsApp Image 2022-04-16 at 20.28.54(2).jpeg)
