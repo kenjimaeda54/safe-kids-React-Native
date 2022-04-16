@@ -10,14 +10,15 @@
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"format:check": "prettier --check '**/*{js,jsx,ts,tsx,css}'",
 		"format": "prettier --write '**/*{js,jsx,ts,tsx,css}'",
-    "android:start": "npm run start",
-    "android:check": "npm run format:check",
-    "android:format": "npm run format",
-    "android:android":"npm run android",
-    "start:android": "concurrently  npm:android:*"
+		"android:start": "npm run start",
+		"android:check": "npm run format:check",
+		"android:format": "npm run format",
+		"android:android": "npm run android",
+		"start:android": "concurrently  npm:android:*"
 	},
 	"dependencies": {
 		"concurrently": "^7.1.0",
+		"convert-string": "^0.1.0",
 		"react": "17.0.2",
 		"react-native": "0.68.0",
 		"react-native-ble-manager": "^8.0.2",
@@ -32,6 +33,7 @@
 		"@babel/core": "^7.12.9",
 		"@babel/runtime": "^7.12.5",
 		"@react-native-community/eslint-config": "^2.0.0",
+		"@types/convert-string": "^0.1.1",
 		"@types/jest": "^26.0.23",
 		"@types/react": "^17.0.43",
 		"@types/react-native": "^0.67.3",

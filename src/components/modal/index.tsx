@@ -1,4 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
+import {Alert as Warning} from 'react-native';
+import {convertString} from 'convert-string';
 import Icon from 'react-native-vector-icons/Feather';
 import {
 	NativeModules,
@@ -34,6 +36,11 @@ interface ListBluetoothProps {
 //	status: number;
 //};
 
+type Blecharacteristic = {
+	characteristic: string;
+	service: string;
+};
+
 const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
@@ -55,24 +62,23 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 
 	const handlePeripheralSelect = async (peripheral: PeripheralProps) => {
 		try {
-			setTryConnect(true);
+			Warning.alert(
+				'Warning',
+				'This feature is development,moment is unavailable',
+				[
+					{
+						text: 'Cancel',
+						style: 'cancel',
+					},
+				]
+			);
+      return;
 			const {
 				advertising: {serviceUUIDs, serviceData},
 			} = peripheral;
 			const services = serviceUUIDs.map((item) => item)[0];
 			await BleManager.connect(peripheral.id);
-			const reponse = await BleManager.retrieveServices(peripheral.id);
-			const {characteristics} = reponse;
-			const dataCharacteristics = characteristics?.map((it) => {
-				return {
-					characteristic: it.characteristic,
-					service: it.service,
-				};
-			});
-			const data = dataCharacteristics
-				? dataCharacteristics[dataCharacteristics.length - 1]
-				: [];
-			console.log('data', data);
+			BleManager.retrieveServices(peripheral.id);
 		} catch (err) {
 			console.log('erro', err);
 			console.log(err);
