@@ -9,9 +9,15 @@
 		"test": "jest",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"format:check": "prettier --check '**/*{js,jsx,ts,tsx,css}'",
-		"format": "prettier --write '**/*{js,jsx,ts,tsx,css}'"
+		"format": "prettier --write '**/*{js,jsx,ts,tsx,css}'",
+    "android:start": "npm run start",
+    "android:check": "npm run format:check",
+    "android:format": "npm run format",
+    "android:android":"npm run android",
+    "start:android": "concurrently  npm:android:*"
 	},
 	"dependencies": {
+		"concurrently": "^7.1.0",
 		"react": "17.0.2",
 		"react-native": "0.68.0",
 		"react-native-ble-manager": "^8.0.2",

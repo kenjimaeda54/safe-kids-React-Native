@@ -1,7 +1,12 @@
 import React, {useRef, useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import {NativeModules,NativeEventEmitter,TouchableOpacity, View} from 'react-native';
-import BleManager  from 'react-native-ble-manager';
+import {
+	NativeModules,
+	NativeEventEmitter,
+	TouchableOpacity,
+	View,
+} from 'react-native';
+import BleManager from 'react-native-ble-manager';
 import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
@@ -24,31 +29,55 @@ interface ListBluetoothProps {
 	searchingBluetooth: boolean;
 }
 
+//type BleDisconnectProps = {
+//	peripheral: string;
+//	status: number;
+//};
+
 const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
 > = ({peripherals, searchingBluetooth, statesBluetooth, ...rest}, ref) => {
-  const BleManagerModule = NativeModules.BleManager
-  const bleManagerEmitter = new NativeEventEmitter(BleManagerModule); 
+	const BleManagerModule = NativeModules.BleManager;
+	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 	const [peripheral, setPeripheral] = useState<PeripheralProps[]>([]);
 	const [isConnected, setIsConnected] = useState(false);
 	const [tryConnect, setTryConnect] = useState(false);
 	const [listId, setListId] = useState<string[]>([]);
 	const {colors} = useTheme();
 
-  function handleBound (peripheralId: string) {
-        console.log(peripheralId)
-  }
-
-  function handleConection (peripheral:string)  {
-    console.log(peripheral);
-  }
-
-	const handlePeripheralSelect = async (peripheral: PeripheralProps) => {
-		setTryConnect(true);
-    BleManager.connect(peripheral.id).then(()=>console.log("sucesso")).catch((err)=>err);
+	const handleConnectPeripheral = (peripheral: string) => {
+		//	BleManager.createBond(peripheral.id)
+		//		.then(() => console.log('Create bond with sucess'))
+		//		.catch((err) => err);
+		console.log('entrou aqui', peripheral);
 	};
 
+	const handlePeripheralSelect = async (peripheral: PeripheralProps) => {
+		try {
+			setTryConnect(true);
+			const {
+				advertising: {serviceUUIDs, serviceData},
+			} = peripheral;
+			const services = serviceUUIDs.map((item) => item)[0];
+			await BleManager.connect(peripheral.id);
+			const reponse = await BleManager.retrieveServices(peripheral.id);
+			const {characteristics} = reponse;
+			const dataCharacteristics = characteristics?.map((it) => {
+				return {
+					characteristic: it.characteristic,
+					service: it.service,
+				};
+			});
+			const data = dataCharacteristics
+				? dataCharacteristics[dataCharacteristics.length - 1]
+				: [];
+			console.log('data', data);
+		} catch (err) {
+			console.log('erro', err);
+			console.log(err);
+		}
+	};
 
 	useEffect(() => {
 		peripherals.filter((peripheral) => {

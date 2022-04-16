@@ -10,7 +10,7 @@ import {
 	Image,
 	TouchableWithoutFeedback,
 } from 'react-native';
-import BleManager  from 'react-native-ble-manager';
+import BleManager from 'react-native-ble-manager';
 import {Container, Title, Body, TextDecoration, TextButton} from './styles';
 import {PeripheralProps} from '../../types';
 import ListBluetooth from '../../components/modal';
@@ -32,10 +32,10 @@ export default function Home() {
 	const [isPress, setIsPress] = useState(false);
 	const [statesBluetooth, setStatesBluetooth] =
 		useState<StatesBluetoothProps>(enableBluetooth);
-  const [searchingBluetooth,setSearchingBluetooth] = useState(false)
+	const [searchingBluetooth, setSearchingBluetooth] = useState(false);
 
 	const handleScan = () => {
-    setSearchingBluetooth(true);
+		setSearchingBluetooth(true);
 		refModal.current?.open();
 		const {state} = statesBluetooth;
 		if (state === 'off') return;
@@ -54,7 +54,7 @@ export default function Home() {
 		setStatesBluetooth(state);
 	};
 
-	const handleStopScan = () => 	setSearchingBluetooth(false);
+	const handleStopScan = () => setSearchingBluetooth(false);
 
 	const handleModal = () => refModal.current?.close();
 
@@ -146,7 +146,7 @@ export default function Home() {
 					<TextButton>Conectar</TextButton>
 				</Pressable>
 				<ListBluetooth
-          searchingBluetooth={searchingBluetooth}
+					searchingBluetooth={searchingBluetooth}
 					statesBluetooth={statesBluetooth}
 					peripherals={allPeripherals}
 					ref={refModal}
