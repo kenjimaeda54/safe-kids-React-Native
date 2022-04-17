@@ -32,7 +32,7 @@ Precisa liberar  aplicativos fora da loja da play store </br>
 - Tela inicial e subjetiva, ideá e apenas orientar os próximos passos a seguir
  ![WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg)](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/blob/develop/github_assets/WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg)
 ##
-- Modal como as pulseiras  disponíveis, neste modal as pulseiras que serão futuramente construídas para o aplicativo serão informadas aqui
+- Modal como as pulseiras  disponíveis, neste modal as pulseiras que serão futuramente construídas para o aplicativo estarão  aqui
 ![WhatsApp%20Image%202022-04-16%20at%2020.28.54(2).jpeg](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/blob/develop/github_assets/WhatsApp%20Image%202022-04-16%20at%2020.28.54(2).jpeg)
 ##
 - Aviso de bluetooth desligado, BLE essencial para funcionamento perfeito do software
