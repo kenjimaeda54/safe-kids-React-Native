@@ -36,5 +36,5 @@ Precisa liberar instalar aplicativos fora da loja da play store </br>
 [Dispositivos](github_assets/WhatsApp Image 2022-04-16 at 20.28.54(2).jpeg)
 
 - Aviso de blueetoth desligado, BLE essencial para funcionamento perfeito do sofwtare
-![Bluettoh off](github_assets/WhatsApp Image 2022-04-16 at 20.28.54.jpeg),
+![Bluettoh off](./github_assets/WhatsApp Image 2022-04-16 at 20.28.54.jpeg),
  
