@@ -1,40 +1,40 @@
 # Watch children
 Aplicativo para monitoramento de criancas via sofwtare e pulseira BLE
 
-## Motivacao
-Minizar problema social relacionado ao desparecimento de criancas no mundo 
+## Motivação
+Minimizar problema social relacionado ao desparecimento de crianças no mundo 
 
 ## Como atingir o objetivo?
-Este sofwtare sera responsavel por monitorar a pulseria que sera desenvolvida para controle da crianca</br>
-Apos a crianca estiver com a pulseria no pulso, atraves do BLE(bluettotoh de baixa energia) e React Native, ambos serao conectados,caso a crianca sai do alcance sera alertado pelo celular que perdeu a localizacao do BLE. Desta forma crianca nao conseguira distanciar dos pais ou responsaveis, alem da visao humana
+Este software sera responsável por monitorar a pulseira que sera desenvolvida para monitoramento da criança</br>
+Apos a criança estiver com a pulseira no pulso, através do BLE(bluettotoh de baixa energia) e React Native, ambos serão conectados, caso a criança sai do alcance sera alertado pelo celular que perdeu a localização do BLE. Desta forma criança não conseguira distanciar dos pais ou responsáveis, além da visão humana
 
 ## Onde consigo o apk para android?
-Ao lado direito voce pode clicar em Releases havera nossas realeases ao longo do desenvolvimento </br>
-[Posivelmente este link vai funcionar](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/releases)</br>
-Gera o dowlound e instala no celular</br>
+Ao lado direito você pode clicar em Releases haverá nossas realeases ao longo do desenvolvimento </br>
+[Posivelmente este link vai direcionar](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/releases)</br>
+Gera o download e instala no celular</br>
 
 
-### Atencao
-Precisa liberar instalar aplicativos fora da loja da play store </br>
+### Atenção
+Precisa liberar  aplicativos fora da loja da play store </br>
 [Click aqui para saber como fazer isso](https://www.cnet.com/tech/mobile/how-to-install-apps-outside-of-google-play/)
 
 ##
-## Como trabalhar no modo desenovlvimento?
+## Como trabalhar no modo desenvolvimento?
 - Fork ou clone o projeto 
-- Instale as dependencais com o gerenciador de pacotes,npm,yarn ou algo de sua preferencia 
-- Seu ambiente desenovlviemnto precisa estar disponivel para iniciar o projeot. Isso inclui o sdk do java e do android 
-- React Native usa o ferramentas do android stduio para iniciar o projeto localmente
-- [Aqui consegue possuir uma orientacao como iniciar preparar o ambiente](https://reactnative.dev/docs/environment-setup)
+- Instale as dependências com o gerenciador de pacotes,npm,yarn ou algo de sua preferência 
+- Seu ambiente desenvolvimento precisa estar disponível para iniciar o projeto. Isso inclui o sdk do java e do android 
+-  React Native usa a ferramentas do android studio para iniciar o projeto localmente
+- [Aqui consegue possuir uma orientação como iniciar preparar o ambiente](https://reactnative.dev/docs/environment-setup)
 
 
 ##
 ## Como funciona o app
-- Tela inicial e subjetiva, idea e apenas orientar os proximos passos a seguir
+- Tela inicial e subjetiva, ideá e apenas orientar os próximos passos a seguir
  ![WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg)](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/blob/develop/github_assets/WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg)
-
-- Modal como as pulseiras  disponiveis, neste modal as pulserias que futuramente serao construidas para o aplicativo serao informadas aqui
+##
+- Modal como as pulseiras  disponíveis, neste modal as pulseiras que serão futuramente construídas para o aplicativo serão informadas aqui
 ![WhatsApp%20Image%202022-04-16%20at%2020.28.54(2).jpeg](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/blob/develop/github_assets/WhatsApp%20Image%202022-04-16%20at%2020.28.54(2).jpeg)
-
-- Aviso de blueetoth desligado, BLE essencial para funcionamento perfeito do sofwtare
+##
+- Aviso de bluetooth desligado, BLE essencial para funcionamento perfeito do software
  ![WhatsApp Image 2022-04-16 at 20.28.54.jpeg](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/blob/develop/github_assets/WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg),
  
