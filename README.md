@@ -9,7 +9,7 @@ Este software sera responsável por monitorar a pulseira que sera desenvolvida p
 Apos a criança estiver com a pulseira no pulso, através do BLE(bluettotoh de baixa energia) e React Native, ambos serão conectados, caso a criança sai do alcance sera alertado pelo celular que perdeu a localização do BLE. Desta forma criança não conseguira distanciar dos pais ou responsáveis, além da visão humana
 
 ## Onde consigo o apk para android?
-Ao lado direito você pode clicar em Releases haverá nossas realeases ao longo do desenvolvimento </br>
+Ao lado direito você pode clicar em Releases haverá nossas realeases em assets ao longo do desenvolvimento </br>
 [Posivelmente este link vai direcionar](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/releases)</br>
 Gera o download e instala no celular</br>
 
