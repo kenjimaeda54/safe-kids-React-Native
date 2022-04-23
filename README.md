@@ -5,8 +5,10 @@ Aplicativo para monitoramento de crianças via sofwtare e pulseira BLE
 Minimizar problema social relacionado ao desparecimento de crianças no mundo 
 
 ## Como atingir o objetivo?
-Este software sera responsável por monitorar a pulseira que sera desenvolvida para monitoramento da criança</br>
-Apos a criança estiver com a pulseira no pulso, através do BLE(bluettotoh de baixa energia) e React Native, ambos serão conectados, caso a criança sai do alcance sera alertado pelo celular que perdeu a localização do BLE. Desta forma criança não conseguira distanciar dos pais ou responsáveis, além da visão humana
+Sera desenvolvido uma pulseira com BLE(bluettotoh de baixa energia)</br>
+Apos a criança estiver com a pulseira no pulso, conectado ao sofwtare em  React Native, sera possível monitorar</br> 
+Caso  sai do alcance sera alertado pelo celular que perdeu a localização. </br>
+Desta forma criança não conseguira distanciar dos pais ou responsáveis, além da visão humana
 
 ## Onde consigo o apk para android?
 Ao lado direito você pode clicar em Releases depois Assets.
