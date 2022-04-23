@@ -12,7 +12,7 @@ Apos a criança estiver com a pulseira no pulso, através do BLE(bluettotoh de b
 Ao lado direito você pode clicar em Releases depois Assets.
  [Posivelmente este link vai direcionar](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/releases)</br>
 Gera o download e instala no celular</br>
-Nossas releases não longo desenvolvimento sempre estão disponíveis no github
+Nossas releases estarão ao longo desenvolvimento sempre estão disponíveis no github
 
 
 ### Atenção
