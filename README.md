@@ -8,7 +8,7 @@ Minimizar problema social relacionado ao desparecimento de crianças no mundo
 Sera desenvolvido uma pulseira com BLE(bluettotoh de baixa energia)</br>
 Apos a criança estiver com a pulseira no pulso, conectado ao sofwtare em  React Native, sera possível monitorar</br> 
 Caso  sai do alcance sera alertado pelo celular que perdeu a localização. </br>
-Desta forma criança não conseguira distanciar dos pais ou responsáveis, além da visão humana
+Desta forma criança não conseguira distanciar dos pais ou responsáveis
 
 ## Onde consigo o apk para android?
 Ao lado direito você pode clicar em Releases depois Assets.
