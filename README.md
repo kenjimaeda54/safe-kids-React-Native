@@ -1,5 +1,5 @@
 # Watch children
-Aplicativo para monitoramento de criancas via sofwtare e pulseira BLE
+Aplicativo para monitoramento de crianças via sofwtare e pulseira BLE
 
 ## Motivação
 Minimizar problema social relacionado ao desparecimento de crianças no mundo 
