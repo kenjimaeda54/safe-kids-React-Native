@@ -1,6 +1,6 @@
 import React, {Context, useEffect, useRef, useState} from 'react';
-import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
+import {useNavigation} from '@react-navigation/native';
 import {
 	NativeEventEmitter,
 	NativeModules,
@@ -9,11 +9,24 @@ import {
 	Pressable,
 	Image,
 	TouchableWithoutFeedback,
+	TouchableOpacity,
 } from 'react-native';
 import BleManager from 'react-native-ble-manager';
-import {Container, Title, Body, TextDecoration, TextButton} from './styles';
+import {
+	Container,
+	Title,
+	Underline,
+	Body,
+	TextDecoration,
+	TextButton,
+	Header,
+	Content,
+	Welcome,
+	Name,
+} from './styles';
 import {PeripheralProps} from '../../types';
-import ListBluetooth from '../../components/modal';
+import ListBluetooth from '../../components/Modal';
+import {KeyRoutes} from '../../utils/routes';
 
 export type StatesBluetoothProps = {
 	state: string;
@@ -23,7 +36,7 @@ export default function Home() {
 	const enableBluetooth = {
 		state: 'off',
 	};
-	const {colors} = useTheme();
+	const {navigate} = useNavigation();
 	const BleManagerModule = NativeModules.BleManager;
 	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 	const refModal = useRef<Modalize>(null);
@@ -110,9 +123,27 @@ export default function Home() {
 		};
 	});
 
+	const handleProfile = () => navigate(KeyRoutes.profile);
+
 	return (
 		<TouchableWithoutFeedback onPress={handleModal}>
 			<Container>
+				<Header>
+					<TouchableOpacity activeOpacity={0.7} onPress={handleProfile}>
+						<Image
+							style={{
+								width: 48,
+								height: 48,
+							}}
+							source={require('../../assets/profile.png')}
+						/>
+					</TouchableOpacity>
+				</Header>
+				<Content>
+					<Name>Olá Ícaro,</Name>
+					<Welcome>Seja bem vindo ao Safe Kids.</Welcome>
+					<Underline />
+				</Content>
 				<Body>
 					<Image
 						resizeMode='contain'
@@ -143,7 +174,12 @@ export default function Home() {
 						top: 50,
 					}}
 					onPress={handleScan}>
-					<TextButton>Conectar</TextButton>
+					<TextButton
+						style={{
+							textDecorationColor: '#FFFF',
+						}}>
+						Conectar
+					</TextButton>
 				</Pressable>
 				<ListBluetooth
 					searchingBluetooth={searchingBluetooth}

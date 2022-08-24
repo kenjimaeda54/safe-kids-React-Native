@@ -7,6 +7,7 @@ export default {
 		green: '#0F0',
 		gray: '#ccc',
 		black: '#000',
+		grayThree: '#CCB5EB',
 	},
 	fonts: {
 		interThin: 'Inter-Light',

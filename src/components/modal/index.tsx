@@ -13,7 +13,7 @@ import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
 import {PeripheralProps} from '../../types';
-import {StatesBluetoothProps} from '../../pages/home';
+import {StatesBluetoothProps} from '../../screens/Home';
 import {
 	Container,
 	Title,
@@ -72,13 +72,7 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 					},
 				]
 			);
-      return;
-			const {
-				advertising: {serviceUUIDs, serviceData},
-			} = peripheral;
-			const services = serviceUUIDs.map((item) => item)[0];
-			await BleManager.connect(peripheral.id);
-			BleManager.retrieveServices(peripheral.id);
+			return;
 		} catch (err) {
 			console.log('erro', err);
 			console.log(err);
