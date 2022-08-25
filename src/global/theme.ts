@@ -8,6 +8,7 @@ export default {
 		gray: '#ccc',
 		black: '#000',
 		grayThree: '#CCB5EB',
+		primarySecond: '#874ECF',
 	},
 	fonts: {
 		interThin: 'Inter-Light',

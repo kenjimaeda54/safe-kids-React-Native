@@ -1,3 +1,11 @@
+export type RootStackParamList = {
+	Home: undefined;
+	Profile: undefined;
+	History: undefined;
+	Login: undefined;
+	SigIn: undefined;
+};
+
 export interface PeripheralProps {
 	advertising: Advertising;
 	id: string;

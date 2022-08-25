@@ -1,8 +1,14 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Image, TouchableOpacity} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {
+	ImageLibraryOptions,
+	launchImageLibrary,
+} from 'react-native-image-picker';
 import {useTheme} from 'styled-components';
 import CustomButton from '../../components/Button';
+import {KeyRoutesApp} from '../../utils/routes';
 import {
 	Container,
 	ButtonBack,
@@ -21,13 +27,30 @@ import {
 
 export default function Profile() {
 	const {colors} = useTheme();
+	const {goBack, navigate} = useNavigation();
 	const [isSecureEntry, setIsSecureEntry] = useState(true);
-
+	const [uriUser, setUriUser] = useState<string>();
+	let options = {
+		mediaType: 'photo',
+	} as ImageLibraryOptions;
 	const handleImgInput = () => setIsSecureEntry((previous) => !previous);
+
+	async function handleImgProfile() {
+		await launchImageLibrary(options, (response) => {
+			if (response.assets) {
+				const uri = response.assets.map((it) => it.uri)[0];
+				setUriUser(uri);
+			}
+		});
+	}
+
+	const handleBackNavigation = () => goBack();
+
+	const handleNavigation = () => navigate(KeyRoutesApp.history);
 
 	return (
 		<Container>
-			<ButtonBack>
+			<ButtonBack onPress={handleBackNavigation}>
 				<Image
 					source={require('../../assets/back-icon.png')}
 					style={{
@@ -37,14 +60,26 @@ export default function Profile() {
 				/>
 			</ButtonBack>
 			<Content>
-				<TouchableWithoutFeedback>
-					<Image
-						source={require('../../assets/profile.png')}
-						style={{
-							width: 60,
-							height: 60,
-						}}
-					/>
+				<TouchableWithoutFeedback onPress={handleImgProfile}>
+					{uriUser ? (
+						<Image
+							source={{uri: uriUser}}
+							style={{
+								width: 100,
+								height: 100,
+								borderRadius: 50,
+							}}
+							resizeMode='cover'
+						/>
+					) : (
+						<Image
+							source={require('../../assets/profile.png')}
+							style={{
+								width: 60,
+								height: 60,
+							}}
+						/>
+					)}
 				</TouchableWithoutFeedback>
 				<Title>Clique na foto para alterar o perfil</Title>
 			</Content>
@@ -82,7 +117,7 @@ export default function Profile() {
 							)}
 						</ImageIconInput>
 					</InputView>
-					<TouchableOpacity activeOpacity={0.7}>
+					<TouchableOpacity onPress={handleNavigation} activeOpacity={0.7}>
 						<LabelButton
 							style={{
 								textDecorationColor: colors.white,

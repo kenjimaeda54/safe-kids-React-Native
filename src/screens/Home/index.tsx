@@ -26,7 +26,7 @@ import {
 } from './styles';
 import {PeripheralProps} from '../../types';
 import ListBluetooth from '../../components/Modal';
-import {KeyRoutes} from '../../utils/routes';
+import {KeyRoutesApp} from '../../utils/routes';
 
 export type StatesBluetoothProps = {
 	state: string;
@@ -123,7 +123,7 @@ export default function Home() {
 		};
 	});
 
-	const handleProfile = () => navigate(KeyRoutes.profile);
+	const handleProfile = () => navigate(KeyRoutesApp.profile);
 
 	return (
 		<TouchableWithoutFeedback onPress={handleModal}>
