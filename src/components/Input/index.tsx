@@ -1,5 +1,10 @@
-import React from 'react';
-import {Image, TextInputProps, TouchableOpacityProps} from 'react-native';
+import React, {forwardRef, ForwardRefRenderFunction, Ref} from 'react';
+import {
+	Image,
+	TextInput,
+	TextInputProps,
+	TouchableOpacityProps,
+} from 'react-native';
 import {useTheme} from 'styled-components';
 import {Container, Label, Input, ViewIcon, ImageIconInput} from './styles';
 
@@ -10,12 +15,10 @@ type InputCommonProps = TextInputProps &
 		isSecureEntry?: boolean;
 	};
 
-export default function InputCommon({
-	label,
-	haveIcon = false,
-	isSecureEntry = false,
-	...rest
-}: InputCommonProps) {
+const InputCommon: ForwardRefRenderFunction<TextInput, InputCommonProps> = (
+	{label, haveIcon = false, isSecureEntry = false, ...rest},
+	ref
+) => {
 	const {colors} = useTheme();
 
 	return (
@@ -23,6 +26,7 @@ export default function InputCommon({
 			<Label>{label}</Label>
 			{!haveIcon ? (
 				<Input
+					ref={ref}
 					{...rest}
 					style={{
 						borderWidth: 2,
@@ -32,6 +36,7 @@ export default function InputCommon({
 			) : (
 				<ViewIcon>
 					<Input
+						ref={ref}
 						{...rest}
 						style={{
 							borderWidth: 2,
@@ -61,4 +66,6 @@ export default function InputCommon({
 			)}
 		</Container>
 	);
-}
+};
+
+export default forwardRef(InputCommon);
