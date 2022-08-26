@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import {Image, TouchableOpacity} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {
@@ -8,10 +8,10 @@ import {
 } from 'react-native-image-picker';
 import {useTheme} from 'styled-components';
 import CustomButton from '../../components/Button';
+import ButtonBack from '../../components/ButtonBack';
 import {KeyRoutesApp} from '../../utils/routes';
 import {
 	Container,
-	ButtonBack,
 	Content,
 	Title,
 	Perfil,
@@ -44,21 +44,11 @@ export default function Profile() {
 		});
 	}
 
-	const handleBackNavigation = () => goBack();
-
 	const handleNavigation = () => navigate(KeyRoutesApp.history);
 
 	return (
 		<Container>
-			<ButtonBack onPress={handleBackNavigation}>
-				<Image
-					source={require('../../assets/back-icon.png')}
-					style={{
-						width: 32,
-						height: 32,
-					}}
-				/>
-			</ButtonBack>
+			<ButtonBack />
 			<Content>
 				<TouchableWithoutFeedback onPress={handleImgProfile}>
 					{uriUser ? (

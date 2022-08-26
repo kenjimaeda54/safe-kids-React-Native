@@ -1,4 +1,4 @@
-import {TextInput} from 'react-native';
+import {TextInput, TouchableOpacity} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
@@ -23,4 +23,14 @@ export const Input = styled(TextInput)`
 	font-size: ${RFValue(18)}px;
 	color: ${({theme}) => theme.colors.black};
 	line-height: ${RFValue(20)}px;
+`;
+
+export const ViewIcon = styled.View`
+	position: relative;
+`;
+
+export const ImageIconInput = styled(TouchableOpacity)`
+	position: absolute;
+	top: 35%;
+	right: 10%;
 `;

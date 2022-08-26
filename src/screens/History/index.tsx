@@ -3,7 +3,6 @@ import {useNavigation} from '@react-navigation/native';
 import {Text, Image, FlatList} from 'react-native';
 import {
 	Container,
-	ButtonBack,
 	Title,
 	TitleHistory,
 	WrapDevices,
@@ -11,23 +10,12 @@ import {
 	Devices,
 } from './styles';
 import {data} from './data';
+import ButtonBack from '../../components/ButtonBack';
 
 export default function History() {
-	const {goBack} = useNavigation();
-
-	const handleBackNavigation = () => goBack();
-
 	return (
 		<Container>
-			<ButtonBack onPress={handleBackNavigation}>
-				<Image
-					source={require('../../assets/back-icon.png')}
-					style={{
-						width: 32,
-						height: 32,
-					}}
-				/>
-			</ButtonBack>
+			<ButtonBack />
 			<Image
 				source={require('../../assets/devices.png')}
 				style={{

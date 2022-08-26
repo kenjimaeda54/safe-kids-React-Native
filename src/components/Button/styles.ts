@@ -6,6 +6,7 @@ export const Container = styled(TouchableOpacity)`
 	padding: 10px 36px;
 	background-color: ${({theme}) => theme.colors.grayThree};
 	border-radius: 17px;
+	width: 140px;
 `;
 
 export const Label = styled.Text`

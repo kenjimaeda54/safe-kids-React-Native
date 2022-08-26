@@ -9,10 +9,6 @@ export const Container = styled.View`
 	background-color: ${({theme}) => theme.colors.primary};
 `;
 
-export const ButtonBack = styled.TouchableOpacity`
-	align-self: flex-start;
-`;
-
 export const Content = styled.View`
 	display: flex;
 	justify-content: center;

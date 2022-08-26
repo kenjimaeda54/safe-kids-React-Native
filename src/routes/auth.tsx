@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import Login from '../screens/Login';
+import SigIn from '../screens/SigIn';
 import {RootStackParamList} from '../types';
 import {KeyRoutesApp} from '../utils/routes';
 
@@ -13,6 +14,7 @@ export default function Auth() {
 				headerShown: false,
 			}}>
 			<RootStack.Screen name={KeyRoutesApp.login} component={Login} />
+			<RootStack.Screen name={KeyRoutesApp.sigIn} component={SigIn} />
 		</RootStack.Navigator>
 	);
 }
