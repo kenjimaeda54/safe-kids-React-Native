@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
 	flex: 1;
-	padding: ${getStatusBarHeight() + 59}px 35px;
+	padding: ${getStatusBarHeight() + 15}px 35px;
 	align-items: center;
 	background-color: ${({theme}) => theme.colors.primary};
 `;

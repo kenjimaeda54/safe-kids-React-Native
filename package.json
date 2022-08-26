@@ -19,6 +19,7 @@
 		"start:ios": "concurrently npm:ios:*"
 	},
 	"dependencies": {
+		"@react-native-firebase/app": "^15.3.0",
 		"@react-navigation/native": "^6.0.11",
 		"@react-navigation/native-stack": "^6.7.0",
 		"concurrently": "^7.1.0",
