@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import fireStore from '@react-native-firebase/firestore';
 import {Image, TouchableOpacity} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {
@@ -10,7 +11,7 @@ import {
 import {useTheme} from 'styled-components';
 import CustomButton from '../../components/Button';
 import ButtonBack from '../../components/ButtonBack';
-import {KeyRoutesApp} from '../../utils/routes';
+import {KeyFireStore, KeyRoutesApp} from '../../utils/constants';
 import {
 	Container,
 	Content,
@@ -26,17 +27,26 @@ import {
 	LabelButton,
 } from './styles';
 import ToastMessage, {Config} from '../../components/ToastMessage';
+import {useAth} from '../../hooks/auth';
 
 export default function Profile() {
 	const {colors} = useTheme();
 	const {goBack, navigate} = useNavigation();
+	const {dataUser, getDataUser} = useAth();
 	const [isSecureEntry, setIsSecureEntry] = useState(true);
 	const [toastConfig, setToastConfig] = useState({} as Config);
 	const [uriUser, setUriUser] = useState<string>();
+	const [passwordUser, setPasswordUser] = useState('sfd');
+	const [isLoading, setIsLoading] = useState(false);
+	const disable = passwordUser.length < 6 || dataUser.password === passwordUser;
 	let options = {
 		mediaType: 'photo',
 	} as ImageLibraryOptions;
 	const handleImgInput = () => setIsSecureEntry((previous) => !previous);
+
+	useEffect(() => {
+		setPasswordUser(dataUser.password);
+	}, []);
 
 	async function handleImgProfile() {
 		await launchImageLibrary(options, (response) => {
@@ -47,18 +57,50 @@ export default function Profile() {
 		});
 	}
 
+	function handleEdit() {
+		setIsLoading(true);
+		const emailCredential = auth.EmailAuthProvider.credential(
+			dataUser.email,
+			dataUser.password
+		);
+		auth()
+			.currentUser?.reauthenticateWithCredential(emailCredential)
+			.then(() => {
+				auth()
+					.currentUser?.updatePassword(passwordUser)
+					.then(async () => {
+						await fireStore()
+							.collection(KeyFireStore.users)
+							.doc(dataUser.uid)
+							.update({
+								name: dataUser.name,
+								email: dataUser.email,
+								uid: dataUser.uid,
+								password: passwordUser,
+							});
+						setToastConfig({
+							type: 'success',
+							text1: 'Sucesso',
+							text2: 'Senha alterada com sucesso',
+						});
+						getDataUser({
+							name: dataUser.name,
+							email: dataUser.email,
+							password: passwordUser,
+							uid: dataUser.uid,
+						});
+						setIsLoading(false);
+					});
+			})
+			.catch((error) => {
+				console.log(error.message);
+			});
+	}
+
 	const handleNavigation = () => navigate(KeyRoutesApp.history);
 
 	const handleLogOut = () => {
-		auth()
-			.signOut()
-			.then(() =>
-				setToastConfig({
-					type: 'info',
-					text1: 'Tchau',
-					text2: 'Até a próxima �',
-				})
-			);
+		auth().signOut();
 	};
 
 	return (
@@ -96,11 +138,13 @@ export default function Profile() {
 					<InputView>
 						<Input
 							secureTextEntry={isSecureEntry}
-							value='sfsfsfsfsfss'
+							value={passwordUser}
 							style={{
 								borderBottomColor: colors.white,
 								borderBottomWidth: 2,
 							}}
+							returnKeyType='done'
+							onChangeText={setPasswordUser}
 						/>
 						<ImageIconInput onPress={handleImgInput}>
 							{isSecureEntry ? (
@@ -145,7 +189,13 @@ export default function Profile() {
 					</TouchableOpacity>
 				</WrapContent>
 			</ContentForm>
-			<CustomButton title='Editar' />
+			<CustomButton
+				title='Editar'
+				isLoading={isLoading}
+				disabled={disable}
+				onPress={handleEdit}
+				opacityDisable={disable}
+			/>
 			{toastConfig.type && <ToastMessage config={toastConfig} />}
 		</Container>
 	);

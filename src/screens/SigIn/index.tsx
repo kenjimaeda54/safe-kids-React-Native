@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Image, TextInput, TouchableOpacity} from 'react-native';
-import CustomButton from '../../components/Button';
 import auth from '@react-native-firebase/auth';
+import fireStore from '@react-native-firebase/firestore';
+import CustomButton from '../../components/Button';
 import ButtonBack from '../../components/ButtonBack';
 import InputCommon from '../../components/Input';
 import {
@@ -20,10 +21,10 @@ import {
 } from './styles';
 import ToastMessage, {Config} from '../../components/ToastMessage';
 import {useAth} from '../../hooks/auth';
-import {useNavigation} from '@react-navigation/native';
+import {KeyFireStore} from '../../utils/constants';
 
 export default function SigIn() {
-	const {getName, getUid} = useAth();
+	const {getDataUser} = useAth();
 	const nameRef = useRef<TextInput>(null);
 	const passwordRef = useRef<TextInput>(null);
 	const emailRef = useRef<TextInput>(null);
@@ -43,14 +44,24 @@ export default function SigIn() {
 		setIsLoading(true);
 		auth()
 			.createUserWithEmailAndPassword(formEmail, formPassword)
-			.then((credentials) => {
-				setToastConfig({
-					type: 'success',
-					text1: 'Sucesso',
-					text2: 'Seja bem vindo ao Safe kids',
-				});
-				getName(formName);
-				getUid(credentials.user.uid);
+			.then(async (credentials) => {
+				await fireStore()
+					.collection(KeyFireStore.users)
+					.doc(credentials.user.uid)
+					.set({
+						email: formEmail,
+						uid: credentials.user.uid,
+						password: formPassword,
+						name: formName,
+					})
+					.then(() => {
+						getDataUser({
+							email: formEmail,
+							name: formName,
+							password: formPassword,
+							uid: credentials.user.uid,
+						});
+					});
 			})
 			.catch((error) => {
 				if (error.code === 'auth/email-already-in-use') {
@@ -84,6 +95,7 @@ export default function SigIn() {
 					ref={nameRef}
 					value={formName}
 					label='Nome'
+					maxLength={15}
 					placeholder='Nome'
 					onChangeText={setFormName}
 					returnKeyType='next'

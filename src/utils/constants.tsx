@@ -5,3 +5,8 @@ export enum KeyRoutesApp {
 	login = 'Login',
 	sigIn = 'SigIn',
 }
+
+export enum KeyFireStore {
+	users = 'users',
+	historyDevices = 'historyDevices',
+}

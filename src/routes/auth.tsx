@@ -3,7 +3,7 @@ import React from 'react';
 import Login from '../screens/Login';
 import SigIn from '../screens/SigIn';
 import {RootStackParamList} from '../types';
-import {KeyRoutesApp} from '../utils/routes';
+import {KeyRoutesApp} from '../utils/constants';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

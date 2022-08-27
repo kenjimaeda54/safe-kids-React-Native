@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {TextInput, TouchableOpacity, View} from 'react-native';
+import fireStore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import CustomButton from '../../components/Button';
 import InputCommon from '../../components/Input';
@@ -16,13 +17,13 @@ import {
 	TitleFooter,
 	LabelButtonSigIn,
 } from './styles';
-import {KeyRoutesApp} from '../../utils/routes';
+import {KeyFireStore, KeyRoutesApp} from '../../utils/constants';
 import {useAth} from '../../hooks/auth';
 import ToastMessage, {Config} from '../../components/ToastMessage';
 
 export default function Login() {
 	const {navigate} = useNavigation();
-	const {getName, getUid} = useAth();
+	const {getDataUser} = useAth();
 	const passwordRef = useRef<TextInput>(null);
 	const emailRef = useRef<TextInput>(null);
 	const [isPassword, setIsPassword] = useState(true);
@@ -38,15 +39,19 @@ export default function Login() {
 		setIsLoading(true);
 		auth()
 			.signInWithEmailAndPassword(formEmail, formPassword)
-			.then((credentials) => {
-				setToastConfig({
-					type: 'success',
-					text1: 'Sucesso',
-					text2: 'Seja bem vindo ao Safe kids',
-				});
-				//implementar o firestore para pegar o name
-				getName('desconhecido');
-				getUid(credentials.user.uid);
+			.then(async (credentials) => {
+				await fireStore()
+					.collection(KeyFireStore.users)
+					.doc(credentials.user.uid)
+					.get()
+					.then((querySnapshot) => {
+						getDataUser({
+							email: querySnapshot.data()?.email,
+							name: querySnapshot.data()?.name,
+							password: querySnapshot.data()?.password,
+							uid: querySnapshot.data()?.uid,
+						});
+					});
 			})
 			.catch((error) => {
 				setToastConfig({

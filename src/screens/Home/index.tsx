@@ -26,7 +26,8 @@ import {
 } from './styles';
 import {PeripheralProps} from '../../types';
 import ListBluetooth from '../../components/Modal';
-import {KeyRoutesApp} from '../../utils/routes';
+import {KeyRoutesApp} from '../../utils/constants';
+import {useAth} from '../../hooks/auth';
 
 export type StatesBluetoothProps = {
 	state: string;
@@ -36,6 +37,7 @@ export default function Home() {
 	const enableBluetooth = {
 		state: 'off',
 	};
+	const {dataUser} = useAth();
 	const {navigate} = useNavigation();
 	const BleManagerModule = NativeModules.BleManager;
 	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
@@ -140,7 +142,7 @@ export default function Home() {
 					</TouchableOpacity>
 				</Header>
 				<Content>
-					<Name>Olá Ícaro,</Name>
+					<Name>Olá {dataUser.name},</Name>
 					<Welcome>Seja bem vindo ao Safe Kids.</Welcome>
 					<Underline />
 				</Content>
