@@ -19,8 +19,11 @@ import {
 	FooterUnderline,
 } from './styles';
 import ToastMessage, {Config} from '../../components/ToastMessage';
+import {useAth} from '../../hooks/auth';
+import {useNavigation} from '@react-navigation/native';
 
 export default function SigIn() {
+	const {getName, getUid} = useAth();
 	const nameRef = useRef<TextInput>(null);
 	const passwordRef = useRef<TextInput>(null);
 	const emailRef = useRef<TextInput>(null);
@@ -41,13 +44,13 @@ export default function SigIn() {
 		auth()
 			.createUserWithEmailAndPassword(formEmail, formPassword)
 			.then((credentials) => {
-				console.log(credentials);
 				setToastConfig({
 					type: 'success',
 					text1: 'Sucesso',
 					text2: 'Seja bem vindo ao Safe kids',
 				});
-				setIsLoading(false);
+				getName(formName);
+				getUid(credentials.user.uid);
 			})
 			.catch((error) => {
 				if (error.code === 'auth/email-already-in-use') {

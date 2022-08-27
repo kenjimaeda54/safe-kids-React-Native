@@ -1,13 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import {Alert as Warning} from 'react-native';
-import {convertString} from 'convert-string';
 import Icon from 'react-native-vector-icons/Feather';
-import {
-	NativeModules,
-	NativeEventEmitter,
-	TouchableOpacity,
-	View,
-} from 'react-native';
+import {NativeModules, NativeEventEmitter, View} from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';

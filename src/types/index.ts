@@ -32,3 +32,13 @@ type ManufacturerData = {
 	bytes: number[];
 	data: string;
 };
+
+export interface DataUser {
+	email: string;
+	metadata: MetaData;
+	isAnonymous: boolean;
+}
+
+type MetaData = {
+	uid: string;
+};

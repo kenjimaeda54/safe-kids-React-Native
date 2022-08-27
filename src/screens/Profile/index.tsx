@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 import {Image, TouchableOpacity} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {
@@ -24,11 +25,13 @@ import {
 	ImageIconInput,
 	LabelButton,
 } from './styles';
+import ToastMessage, {Config} from '../../components/ToastMessage';
 
 export default function Profile() {
 	const {colors} = useTheme();
 	const {goBack, navigate} = useNavigation();
 	const [isSecureEntry, setIsSecureEntry] = useState(true);
+	const [toastConfig, setToastConfig] = useState({} as Config);
 	const [uriUser, setUriUser] = useState<string>();
 	let options = {
 		mediaType: 'photo',
@@ -45,6 +48,18 @@ export default function Profile() {
 	}
 
 	const handleNavigation = () => navigate(KeyRoutesApp.history);
+
+	const handleLogOut = () => {
+		auth()
+			.signOut()
+			.then(() =>
+				setToastConfig({
+					type: 'info',
+					text1: 'Tchau',
+					text2: 'Até a próxima �',
+				})
+			);
+	};
 
 	return (
 		<Container>
@@ -115,9 +130,23 @@ export default function Profile() {
 							Histórico
 						</LabelButton>
 					</TouchableOpacity>
+					<TouchableOpacity
+						style={{
+							marginTop: 20,
+						}}
+						onPress={handleLogOut}
+						activeOpacity={0.7}>
+						<LabelButton
+							style={{
+								textDecorationColor: colors.white,
+							}}>
+							Sair
+						</LabelButton>
+					</TouchableOpacity>
 				</WrapContent>
 			</ContentForm>
 			<CustomButton title='Editar' />
+			{toastConfig.type && <ToastMessage config={toastConfig} />}
 		</Container>
 	);
 }

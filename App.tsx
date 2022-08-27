@@ -3,6 +3,7 @@ import {LogBox} from 'react-native';
 import 'react-native-gesture-handler';
 import {ThemeProvider} from 'styled-components';
 import themes from './src/global/theme';
+import ContextProvider from './src/hooks';
 import Routes from './src/routes';
 
 LogBox.ignoreLogs([
@@ -12,7 +13,9 @@ LogBox.ignoreLogs([
 export function App() {
 	return (
 		<ThemeProvider theme={themes}>
-			<Routes />
+			<ContextProvider>
+				<Routes />
+			</ContextProvider>
 		</ThemeProvider>
 	);
 }
