@@ -2,7 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import fireStore from '@react-native-firebase/firestore';
-import {Image, TouchableOpacity} from 'react-native';
+import {
+	Image,
+	TouchableOpacity,
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+} from 'react-native';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {
 	ImageLibraryOptions,

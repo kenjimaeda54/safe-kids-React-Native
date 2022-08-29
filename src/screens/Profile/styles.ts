@@ -13,7 +13,7 @@ export const Content = styled.View`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-top: 79px;
+	margin-top: 10%;
 `;
 
 export const Title = styled.Text`
@@ -25,8 +25,8 @@ export const Title = styled.Text`
 `;
 
 export const Perfil = styled.Text`
-	margin-top: 84px;
-	margin-bottom: 50px;
+	margin-top: 20%;
+	margin-bottom: 5%;
 	text-align: center;
 	font-size: ${RFValue(25)}px;
 	line-height: ${RFValue(30)}px;
@@ -50,8 +50,8 @@ export const MyData = styled.Text`
 
 export const WrapContent = styled.View`
 	padding: 0px 13px;
-	margin-top: 27px;
-	margin-bottom: 56px;
+	margin-top: 8%;
+	margin-bottom: 20%;
 `;
 
 export const Label = styled.Text`
@@ -59,7 +59,7 @@ export const Label = styled.Text`
 	font-size: ${RFValue(16)}px;
 	line-height: ${RFValue(20)}px;
 	color: ${({theme}) => theme.colors.white};
-	margin-bottom: 28px;
+	margin-bottom: 10%;
 `;
 
 export const InputView = styled.View`
@@ -76,7 +76,7 @@ export const Input = styled.TextInput`
 	font-size: ${RFValue(16)}px;
 	line-height: ${RFValue(20)}px;
 	color: ${({theme}) => theme.colors.white};
-	margin-bottom: 34px;
+	margin-bottom: 10%;
 `;
 
 export const LabelButton = styled.Text`
