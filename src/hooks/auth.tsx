@@ -41,7 +41,15 @@ function Provider({children}: ProviderProps) {
 	const getDataUser = (data: DataUser) => setDataUser(data);
 
 	useEffect(() => {
+		//listener para garantir sempre logado
 		auth().onAuthStateChanged((userState) => {
+			//reautenticar usuário
+			const emailCredential = auth.EmailAuthProvider.credential(
+				dataUser.email,
+				dataUser.password
+			);
+			auth().currentUser?.reauthenticateWithCredential(emailCredential);
+			//listener para garantir atualização da coleção no banco
 			fireStore()
 				.collection(KeyFireStore.users)
 				.doc(userState?.uid)

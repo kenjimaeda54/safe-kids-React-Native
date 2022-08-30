@@ -1,7 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import app from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import fireStore from '@react-native-firebase/firestore';
+import Storage from '@react-native-firebase/storage';
+import * as Progress from 'react-native-progress';
 import {
 	Image,
 	TouchableOpacity,
@@ -44,6 +47,8 @@ export default function Profile() {
 	const [uriUser, setUriUser] = useState<string>();
 	const [passwordUser, setPasswordUser] = useState('sfd');
 	const [isLoading, setIsLoading] = useState(false);
+	const [transferred, setTransferred] = useState<number>();
+	const [uploading, setUploading] = useState(false);
 	const disable = passwordUser.length < 6 || dataUser.password === passwordUser;
 	let options = {
 		mediaType: 'photo',
@@ -58,45 +63,59 @@ export default function Profile() {
 		await launchImageLibrary(options, (response) => {
 			if (response.assets) {
 				const uri = response.assets.map((it) => it.uri)[0];
-				setUriUser(uri);
+				const filename = uri?.substring(uri.lastIndexOf('/') + 1);
+				const uploadUri =
+					Platform.OS === 'ios' ? uri?.replace('file://', '') : uri;
+				if (uploadUri) {
+					setUploading(true);
+					setUriUser(undefined);
+					const storage = Storage();
+					const reference = storage.ref(filename);
+					const task = reference.putFile(uploadUri);
+					task.on('state_changed', (snapshot) => {
+						setTransferred(
+							Math.round(snapshot.bytesTransferred / snapshot.totalBytes) *
+								10000
+						);
+					});
+					task.then(async () => {
+						const mDownloadUrl = await Storage().ref(filename).getDownloadURL();
+						setUploading(false);
+						setUriUser(mDownloadUrl);
+						setTransferred(undefined);
+					});
+					task.catch((error) => console.log(error.message));
+				}
 			}
-		});
+		}).catch((e) => console.log(e.message));
 	}
 
 	function handleEdit() {
 		setIsLoading(true);
-		const emailCredential = auth.EmailAuthProvider.credential(
-			dataUser.email,
-			dataUser.password
-		);
 		auth()
-			.currentUser?.reauthenticateWithCredential(emailCredential)
-			.then(() => {
-				auth()
-					.currentUser?.updatePassword(passwordUser)
-					.then(async () => {
-						await fireStore()
-							.collection(KeyFireStore.users)
-							.doc(dataUser.uid)
-							.update({
-								name: dataUser.name,
-								email: dataUser.email,
-								uid: dataUser.uid,
-								password: passwordUser,
-							});
-						setToastConfig({
-							type: 'success',
-							text1: 'Sucesso',
-							text2: 'Senha alterada com sucesso',
-						});
-						getDataUser({
-							name: dataUser.name,
-							email: dataUser.email,
-							password: passwordUser,
-							uid: dataUser.uid,
-						});
-						setIsLoading(false);
+			.currentUser?.updatePassword(passwordUser)
+			.then(async () => {
+				await fireStore()
+					.collection(KeyFireStore.users)
+					.doc(dataUser.uid)
+					.update({
+						name: dataUser.name,
+						email: dataUser.email,
+						uid: dataUser.uid,
+						password: passwordUser,
 					});
+				setToastConfig({
+					type: 'success',
+					text1: 'Sucesso',
+					text2: 'Senha alterada com sucesso',
+				});
+				getDataUser({
+					name: dataUser.name,
+					email: dataUser.email,
+					password: passwordUser,
+					uid: dataUser.uid,
+				});
+				setIsLoading(false);
 			})
 			.catch((error) => {
 				console.log(error.message);
@@ -118,11 +137,16 @@ export default function Profile() {
 						<Image
 							source={{uri: uriUser}}
 							style={{
-								width: 100,
-								height: 100,
-								borderRadius: 50,
+								width: 80,
+								height: 80,
+								borderRadius: 40,
 							}}
-							resizeMode='cover'
+						/>
+					) : uploading ? (
+						<Progress.Pie
+							progress={transferred}
+							size={60}
+							color={colors.grayThree}
 						/>
 					) : (
 						<Image
