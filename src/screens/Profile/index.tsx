@@ -4,16 +4,10 @@ import auth from '@react-native-firebase/auth';
 import fireStore from '@react-native-firebase/firestore';
 import Storage from '@react-native-firebase/storage';
 import * as Progress from 'react-native-progress';
-import {
-	Image,
-	TouchableOpacity,
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-} from 'react-native';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {Image, Platform, TouchableOpacity, View} from 'react-native';
 import {
 	ImageLibraryOptions,
+	launchCamera,
 	launchImageLibrary,
 } from 'react-native-image-picker';
 import {useTheme} from 'styled-components';
@@ -33,10 +27,15 @@ import {
 	InputView,
 	ImageIconInput,
 	LabelButton,
+	ToastAlert,
+	ButtonToast,
+	LabelToast,
 } from './styles';
 import ToastMessage, {Config} from '../../components/ToastMessage';
 import {useAth} from '../../hooks/auth';
 import {data} from '../History/data';
+import Toast, {BaseToastProps} from 'react-native-toast-message';
+import {getBottomSpace, getStatusBarHeight} from 'react-native-iphone-x-helper';
 
 export default function Profile() {
 	const {colors} = useTheme();
@@ -48,6 +47,7 @@ export default function Profile() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [transferred, setTransferred] = useState<number>();
 	const [uploading, setUploading] = useState(false);
+	const [showAlert, setShowAlert] = useState(false);
 	const disable = passwordUser.length < 6 || dataUser.password === passwordUser;
 	let options = {
 		mediaType: 'photo',
@@ -58,9 +58,31 @@ export default function Profile() {
 		setPasswordUser(dataUser.password);
 	}, []);
 
+	const config = {
+		toastAlert: ({text1, text2}: BaseToastProps) => (
+			<ToastAlert>
+				<ButtonToast activeOpacity={0.7} onPress={handleGallery}>
+					<LabelToast>{text1}</LabelToast>
+				</ButtonToast>
+				<ButtonToast activeOpacity={0.7} onPress={handleCamera}>
+					<LabelToast>{text2}</LabelToast>
+				</ButtonToast>
+			</ToastAlert>
+		),
+	};
+
 	async function handleImgProfile() {
+		Toast.show({
+			type: 'toastAlert',
+			topOffset: getStatusBarHeight() + 60,
+			text1: 'Galeria',
+			text2: 'Camera',
+			position: 'top',
+		});
+	}
+
+	async function handleGallery() {
 		await launchImageLibrary(options, (response) => {
-			console.log('esta entrando aqui');
 			if (response.assets) {
 				const uri = response.assets.map((it) => it.uri)[0];
 				//filename pode ser qualquer nome,e o nome do arquivo salvo
@@ -95,10 +117,14 @@ export default function Profile() {
 							photo: downLoadUrl,
 						});
 					});
-					task.catch((error) => console.log(error.message));
+					task.catch((error: Error) => console.log(error.message));
 				}
 			}
 		}).catch((e) => console.log(e.message));
+	}
+
+	async function handleCamera() {
+		await launchCamera(options, (response) => {});
 	}
 
 	function handleEdit() {
@@ -239,6 +265,7 @@ export default function Profile() {
 				opacityDisable={disable}
 			/>
 			{toastConfig.type && <ToastMessage config={toastConfig} />}
+			<Toast config={config} />
 		</Container>
 	);
 }

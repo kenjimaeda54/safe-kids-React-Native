@@ -7,6 +7,7 @@ export const Container = styled.View`
 	padding: ${getStatusBarHeight() + 27}px 13px;
 	align-items: center;
 	background-color: ${({theme}) => theme.colors.primary};
+	padding: 15px 0px;
 `;
 
 export const Content = styled.View`
@@ -84,5 +85,30 @@ export const LabelButton = styled.Text`
 	font-size: ${RFValue(16)}px;
 	line-height: ${RFValue(19)}px;
 	text-decoration: underline;
+	color: ${({theme}) => theme.colors.white};
+`;
+
+export const ToastAlert = styled.View`
+	flex-direction: row;
+	width: 80%;
+	background-color: ${({theme}) => theme.colors.white};
+	padding: 20px;
+	border-radius: 10px;
+	justify-content: center;
+	align-items: center;
+`;
+
+export const ButtonToast = styled.TouchableOpacity`
+	padding: 10px 7px;
+	text-align: center;
+	background-color: ${({theme}) => theme.colors.grayThree};
+	margin: 0px 20px;
+	border-radius: 7px;
+`;
+
+export const LabelToast = styled.Text`
+	font-family: ${({theme}) => theme.fonts.interMedium};
+	font-size: ${RFValue(20)}px;
+	line-height: ${RFValue(22)}px;
 	color: ${({theme}) => theme.colors.white};
 `;

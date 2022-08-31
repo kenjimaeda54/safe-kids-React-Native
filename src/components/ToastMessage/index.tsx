@@ -1,6 +1,10 @@
 import React from 'react';
 import {getStatusBarHeight} from 'react-native-iphone-x-helper';
-import Toast from 'react-native-toast-message';
+import Toast, {
+	BaseToast,
+	BaseToastProps,
+	ErrorToast,
+} from 'react-native-toast-message';
 
 interface ToastProps {
 	config: Config;
@@ -20,5 +24,38 @@ export default function ToastMessage({config}: ToastProps) {
 		topOffset: getStatusBarHeight() + 15,
 		autoHide: true,
 	});
-	return <Toast />;
+
+	const toastConfig = {
+		success: (props: JSX.IntrinsicAttributes & BaseToastProps) => (
+			<BaseToast
+				{...props}
+				contentContainerStyle={{paddingHorizontal: 15}}
+				text1Style={{
+					fontSize: 20,
+					fontWeight: '600',
+				}}
+				text2Style={{
+					fontSize: 25,
+					fontWeight: '400',
+				}}
+			/>
+		),
+
+		error: (props: JSX.IntrinsicAttributes & BaseToastProps) => (
+			<ErrorToast
+				{...props}
+				contentContainerStyle={{paddingHorizontal: 15}}
+				text1Style={{
+					fontSize: 20,
+					fontWeight: '600',
+				}}
+				text2Style={{
+					fontSize: 25,
+					fontWeight: '400',
+				}}
+			/>
+		),
+	};
+
+	return <Toast config={toastConfig} />;
 }
