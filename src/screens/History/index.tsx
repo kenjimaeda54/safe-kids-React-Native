@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {Text, Image, FlatList} from 'react-native';
+import {Text, Image, FlatList, View} from 'react-native';
 import fireStore from '@react-native-firebase/firestore';
 import {
 	Container,
@@ -9,24 +9,29 @@ import {
 	WrapDevices,
 	Highlighter,
 	Devices,
+	LabelDevices,
 } from './styles';
 import {data} from './data';
 import ButtonBack from '../../components/ButtonBack';
 import {useAth} from '../../hooks/auth';
 import {KeyFireStore} from '../../utils/constants';
+import {DataDevices} from '../../types';
 
 export default function History() {
 	const {dataUser} = useAth();
 	const [loading, setIsLoading] = useState(true);
+	const [dataDevices, setDataDevices] = useState<DataDevices | null>();
 
 	useEffect(() => {
 		(async () => {
 			await fireStore()
-				.collection(KeyFireStore.historyDevices)
+				.collection(KeyFireStore.users)
 				.doc(dataUser.uid)
 				.get()
 				.then((snapshot) => {
-					console.log(snapshot);
+					if (snapshot.exists) {
+						setDataDevices(snapshot.data()?.historyDevices);
+					}
 					setIsLoading(false);
 				});
 		})();
@@ -45,7 +50,7 @@ export default function History() {
 			/>
 			<Title>Dispositivos recentes</Title>
 			<TitleHistory>Histórico</TitleHistory>
-			{!loading && dataUser.historyDevices ? (
+			{!loading && dataDevices ? (
 				<FlatList
 					data={data}
 					style={{
@@ -55,8 +60,17 @@ export default function History() {
 					keyExtractor={(it) => it.id}
 					renderItem={({item}) => (
 						<WrapDevices>
-							<Highlighter />
-							<Devices>{item.name}</Devices>
+							<View
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+								}}>
+								<Highlighter />
+								<Devices>{item.name}</Devices>
+							</View>
+							<LabelDevices>
+								{item.status ? 'conectado' : 'desconectado'}
+							</LabelDevices>
 						</WrapDevices>
 					)}
 				/>

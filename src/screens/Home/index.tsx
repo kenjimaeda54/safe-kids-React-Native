@@ -1,4 +1,4 @@
-import React, {Context, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Modalize} from 'react-native-modalize';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -48,6 +48,7 @@ export default function Home() {
 	const [statesBluetooth, setStatesBluetooth] =
 		useState<StatesBluetoothProps>(enableBluetooth);
 	const [searchingBluetooth, setSearchingBluetooth] = useState(false);
+	const [photoUser, setPhotoUser] = useState('');
 
 	const handleScan = () => {
 		setSearchingBluetooth(true);
@@ -85,7 +86,11 @@ export default function Home() {
 		if (state === 'off') {
 			BleManager.checkState();
 		}
-	}, [statesBluetooth]);
+
+		if (dataUser.photo) {
+			setPhotoUser(dataUser.photo);
+		}
+	}, [statesBluetooth, dataUser]);
 
 	useEffect(() => {
 		BleManager.start({showAlert: false});
@@ -132,13 +137,25 @@ export default function Home() {
 			<Container>
 				<Header>
 					<TouchableOpacity activeOpacity={0.7} onPress={handleProfile}>
-						<Image
-							style={{
-								width: 48,
-								height: 48,
-							}}
-							source={require('../../assets/profile.png')}
-						/>
+						{photoUser ? (
+							<Image
+								style={{
+									width: 60,
+									height: 60,
+									borderRadius: 30,
+								}}
+								source={{uri: photoUser}}
+								defaultSource={require('../../assets/loading_photo.png')}
+							/>
+						) : (
+							<Image
+								style={{
+									width: 48,
+									height: 48,
+								}}
+								source={require('../../assets/profile.png')}
+							/>
+						)}
 					</TouchableOpacity>
 				</Header>
 				<Content>

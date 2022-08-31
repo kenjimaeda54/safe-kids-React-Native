@@ -30,10 +30,10 @@ export const TitleHistory = styled.Text`
 `;
 
 export const WrapDevices = styled.View`
-	flex-direction: row;
-	align-items: center;
+	justify-content: center;
 	width: 100%;
 	justify-content: flex-start;
+	margin: 2% 0px;
 `;
 
 export const Highlighter = styled.View`
@@ -48,6 +48,14 @@ export const Devices = styled.Text`
 	margin: 7px 0px;
 	font-size: ${RFValue(17)}px;
 	line-height: ${RFValue(20)}px;
+	font-family: ${({theme}) => theme.fonts.interMedium};
+	color: ${({theme}) => theme.colors.white};
+`;
+
+export const LabelDevices = styled.Text`
+	margin-left: 10%;
+	font-size: ${RFValue(13)}px;
+	line-height: ${RFValue(15)}px;
 	font-family: ${({theme}) => theme.fonts.interMedium};
 	color: ${({theme}) => theme.colors.white};
 `;

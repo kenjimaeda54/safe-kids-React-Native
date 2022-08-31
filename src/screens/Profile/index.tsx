@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import app from '@react-native-firebase/app';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import fireStore from '@react-native-firebase/firestore';
 import Storage from '@react-native-firebase/storage';
@@ -20,7 +19,7 @@ import {
 import {useTheme} from 'styled-components';
 import CustomButton from '../../components/Button';
 import ButtonBack from '../../components/ButtonBack';
-import {KeyFireStore, KeyRoutesApp} from '../../utils/constants';
+import {KeyFireStore, KeyRoutesApp, keyStorage} from '../../utils/constants';
 import {
 	Container,
 	Content,
@@ -37,14 +36,14 @@ import {
 } from './styles';
 import ToastMessage, {Config} from '../../components/ToastMessage';
 import {useAth} from '../../hooks/auth';
+import {data} from '../History/data';
 
 export default function Profile() {
 	const {colors} = useTheme();
-	const {goBack, navigate} = useNavigation();
+	const {navigate} = useNavigation();
 	const {dataUser, getDataUser} = useAth();
 	const [isSecureEntry, setIsSecureEntry] = useState(true);
 	const [toastConfig, setToastConfig] = useState({} as Config);
-	const [uriUser, setUriUser] = useState<string>();
 	const [passwordUser, setPasswordUser] = useState('sfd');
 	const [isLoading, setIsLoading] = useState(false);
 	const [transferred, setTransferred] = useState<number>();
@@ -63,12 +62,13 @@ export default function Profile() {
 		await launchImageLibrary(options, (response) => {
 			if (response.assets) {
 				const uri = response.assets.map((it) => it.uri)[0];
+				//filename pode ser qualquer nome,e o nome do arquivo salvo
 				const filename = uri?.substring(uri.lastIndexOf('/') + 1);
+				//uplad precisa ser o caminho correto da imagem
 				const uploadUri =
 					Platform.OS === 'ios' ? uri?.replace('file://', '') : uri;
 				if (uploadUri) {
 					setUploading(true);
-					setUriUser(undefined);
 					const storage = Storage();
 					const reference = storage.ref(filename);
 					const task = reference.putFile(uploadUri);
@@ -79,10 +79,20 @@ export default function Profile() {
 						);
 					});
 					task.then(async () => {
-						const mDownloadUrl = await Storage().ref(filename).getDownloadURL();
+						const downLoadUrl = await Storage().ref(filename).getDownloadURL();
+						fireStore()
+							.collection(KeyFireStore.users)
+							.doc(dataUser.uid)
+							.set({
+								...dataUser,
+								photo: downLoadUrl,
+							});
 						setUploading(false);
-						setUriUser(mDownloadUrl);
 						setTransferred(undefined);
+						getDataUser({
+							...dataUser,
+							photo: downLoadUrl,
+						});
 					});
 					task.catch((error) => console.log(error.message));
 				}
@@ -99,9 +109,7 @@ export default function Profile() {
 					.collection(KeyFireStore.users)
 					.doc(dataUser.uid)
 					.update({
-						name: dataUser.name,
-						email: dataUser.email,
-						uid: dataUser.uid,
+						...dataUser,
 						password: passwordUser,
 					});
 				setToastConfig({
@@ -110,10 +118,8 @@ export default function Profile() {
 					text2: 'Senha alterada com sucesso',
 				});
 				getDataUser({
-					name: dataUser.name,
-					email: dataUser.email,
+					...dataUser,
 					password: passwordUser,
-					uid: dataUser.uid,
 				});
 				setIsLoading(false);
 			})
@@ -130,12 +136,13 @@ export default function Profile() {
 
 	return (
 		<Container>
-			<ButtonBack />
+			<ButtonBack disabled={uploading} />
 			<Content>
 				<TouchableWithoutFeedback onPress={handleImgProfile}>
-					{uriUser ? (
+					{dataUser.photo && !uploading ? (
 						<Image
-							source={{uri: uriUser}}
+							source={{uri: dataUser.photo}}
+							defaultSource={require('../../assets/loading_photo.png')}
 							style={{
 								width: 80,
 								height: 80,
@@ -196,7 +203,10 @@ export default function Profile() {
 							)}
 						</ImageIconInput>
 					</InputView>
-					<TouchableOpacity onPress={handleNavigation} activeOpacity={0.7}>
+					<TouchableOpacity
+						disabled={uploading}
+						onPress={handleNavigation}
+						activeOpacity={0.7}>
 						<LabelButton
 							style={{
 								textDecorationColor: colors.white,
@@ -208,6 +218,7 @@ export default function Profile() {
 						style={{
 							marginTop: 20,
 						}}
+						disabled={uploading}
 						onPress={handleLogOut}
 						activeOpacity={0.7}>
 						<LabelButton

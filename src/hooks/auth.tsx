@@ -7,7 +7,8 @@ import React, {
 } from 'react';
 import auth from '@react-native-firebase/auth';
 import fireStore from '@react-native-firebase/firestore';
-import {KeyFireStore} from '../utils/constants';
+import Storage from '@react-native-firebase/storage';
+import {KeyFireStore, keyStorage} from '../utils/constants';
 
 interface ProviderProps {
 	children: ReactNode;
@@ -25,12 +26,13 @@ type DataUser = {
 	password: string;
 	historyDevices?: HistoryDevices;
 	email: string;
+	photo?: string;
 };
 
 type HistoryDevices = {
 	history: string;
 	status: false;
-};
+}[];
 
 const AuthProvider = createContext({} as UserProps);
 
@@ -42,7 +44,7 @@ function Provider({children}: ProviderProps) {
 
 	useEffect(() => {
 		//listener para garantir sempre logado
-		auth().onAuthStateChanged((userState) => {
+		auth().onAuthStateChanged(async (userState) => {
 			//reautenticar usuário
 			const emailCredential = auth.EmailAuthProvider.credential(
 				dataUser.email,
@@ -59,6 +61,7 @@ function Provider({children}: ProviderProps) {
 						name: querySnapshot.data()?.name,
 						password: querySnapshot.data()?.password,
 						uid: querySnapshot.data()?.uid,
+						photo: querySnapshot.data()?.photo,
 					});
 				});
 			setIsAnonymous(userState?.isAnonymous);

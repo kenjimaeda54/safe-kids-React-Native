@@ -6,6 +6,12 @@ export type RootStackParamList = {
 	SigIn: undefined;
 };
 
+export type DataDevices = {
+	id: string;
+	name: string;
+	status: string;
+};
+
 export interface PeripheralProps {
 	advertising: Advertising;
 	id: string;

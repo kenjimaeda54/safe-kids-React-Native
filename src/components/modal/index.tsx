@@ -6,6 +6,7 @@ import BleManager from 'react-native-ble-manager';
 import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';
 import {Modalize} from 'react-native-modalize';
+import FireStore from '@react-native-firebase/firestore';
 import {PeripheralProps} from '../../types';
 import {StatesBluetoothProps} from '../../screens/Home';
 import {
@@ -18,6 +19,8 @@ import {
 	Alert,
 	ColorSubtitle,
 } from './styles';
+import {useAth} from '../../hooks/auth';
+import {KeyFireStore} from '../../utils/constants';
 
 interface ListBluetoothProps {
 	peripherals: PeripheralProps[];
@@ -41,6 +44,7 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 > = ({peripherals, searchingBluetooth, statesBluetooth, ...rest}, ref) => {
 	const BleManagerModule = NativeModules.BleManager;
 	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+	const {dataUser} = useAth();
 	const [peripheral, setPeripheral] = useState<PeripheralProps[]>([]);
 	const [isConnected, setIsConnected] = useState(false);
 	const [tryConnect, setTryConnect] = useState(false);
@@ -79,8 +83,42 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 				peripheral.advertising.isConnectable === true &&
 				!listId.includes(peripheral.id)
 			) {
+				//aqui vai ficar conexão com firestore e pulseiras encontradas
 				setListId((previous) => [...previous, peripheral.id]);
 				setPeripheral((previous) => [...previous, peripheral]);
+				FireStore()
+					.collection(KeyFireStore.users)
+					.doc(dataUser.uid)
+					.get()
+					.then((snapshot) => {
+						if (snapshot.exists) {
+							const uid = `${Math.random() * Number.MAX_VALUE}+${
+								Math.random() * 1000
+							}`;
+							const newDevice = {
+								id: uid,
+								name: peripheral.name,
+								status: true,
+							};
+							const data = snapshot.data()?.historyDevices
+								? [...snapshot.data()?.historyDevices, newDevice]
+								: [newDevice];
+							FireStore()
+								.collection(KeyFireStore.users)
+								.doc(dataUser.uid)
+								.set({
+									email: dataUser.email,
+									password: dataUser.password,
+									uid: dataUser.uid,
+									photo: dataUser.photo,
+									name: dataUser.name,
+									historyDevices: data,
+								})
+								.catch((error) => {
+									console.log(error.message);
+								});
+						}
+					});
 				return peripheral;
 			}
 		});

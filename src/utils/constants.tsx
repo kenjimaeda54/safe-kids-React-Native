@@ -8,5 +8,9 @@ export enum KeyRoutesApp {
 
 export enum KeyFireStore {
 	users = 'users',
-	historyDevices = 'historyDevices',
+}
+
+export enum keyStorage {
+	refPhoto = '@key_reference_photo_safe_kids',
+	currentId = '@key_uid_safe_kids',
 }

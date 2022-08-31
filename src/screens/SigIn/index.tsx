@@ -10,9 +10,6 @@ import {
 	Title,
 	Underline,
 	ContainerInput,
-	ContainerConnected,
-	Connected,
-	LabelConnected,
 	Footer,
 	UnderlineFooter,
 	FooterImg,
@@ -123,12 +120,6 @@ export default function SigIn() {
 					returnKeyType='done'
 				/>
 			</ContainerInput>
-			<ContainerConnected>
-				<TouchableOpacity>
-					<Connected />
-				</TouchableOpacity>
-				<LabelConnected>Mantenha-me conectado</LabelConnected>
-			</ContainerConnected>
 			<CustomButton
 				isLoading={isLoading}
 				disabled={disable}

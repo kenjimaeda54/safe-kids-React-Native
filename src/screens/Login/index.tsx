@@ -10,14 +10,11 @@ import {
 	Title,
 	Underline,
 	ContainerInput,
-	ContainerConnected,
-	Connected,
-	LabelConnected,
 	Footer,
 	TitleFooter,
 	LabelButtonSigIn,
 } from './styles';
-import {KeyFireStore, KeyRoutesApp} from '../../utils/constants';
+import {KeyFireStore, KeyRoutesApp, keyStorage} from '../../utils/constants';
 import {useAth} from '../../hooks/auth';
 import ToastMessage, {Config} from '../../components/ToastMessage';
 
@@ -44,12 +41,13 @@ export default function Login() {
 					.collection(KeyFireStore.users)
 					.doc(credentials.user.uid)
 					.get()
-					.then((querySnapshot) => {
+					.then(async (querySnapshot) => {
 						getDataUser({
 							email: querySnapshot.data()?.email,
 							name: querySnapshot.data()?.name,
 							password: querySnapshot.data()?.password,
 							uid: querySnapshot.data()?.uid,
+							photo: querySnapshot.data()?.photo,
 						});
 					});
 			})
@@ -97,12 +95,6 @@ export default function Login() {
 						haveIcon
 					/>
 				</ContainerInput>
-				<ContainerConnected>
-					<TouchableOpacity>
-						<Connected />
-					</TouchableOpacity>
-					<LabelConnected>Mantenha-me conectado</LabelConnected>
-				</ContainerConnected>
 				<CustomButton
 					isLoading={isLoading}
 					disabled={disable}

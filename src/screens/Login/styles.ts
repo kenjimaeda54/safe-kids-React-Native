@@ -31,30 +31,6 @@ export const ContainerInput = styled.View`
 	margin: 22px 0px;
 `;
 
-export const ContainerConnected = styled.View`
-	width: 100%;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
-	margin-bottom: 24px;
-`;
-
-export const Connected = styled.View`
-	width: 24px;
-	height: 24px;
-	border-radius: 3px;
-	border: 3px solid ${({theme}) => theme.colors.primarySecond};
-	background-color: ${({theme}) => theme.colors.primary};
-	margin: 0px 10px;
-`;
-
-export const LabelConnected = styled.Text`
-	font-size: ${RFValue(15)}px;
-	line-height: ${RFValue(20)}px;
-	font-family: ${({theme}) => theme.fonts.interThin};
-	color: ${({theme}) => theme.colors.white};
-`;
-
 export const Footer = styled.View`
 	flex-direction: row;
 	align-items: center;
