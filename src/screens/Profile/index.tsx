@@ -4,7 +4,13 @@ import auth from '@react-native-firebase/auth';
 import fireStore from '@react-native-firebase/firestore';
 import Storage from '@react-native-firebase/storage';
 import * as Progress from 'react-native-progress';
-import {Image, Platform, TouchableOpacity, View} from 'react-native';
+import {
+	Image,
+	PermissionsAndroid,
+	Platform,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import {
 	ImageLibraryOptions,
 	launchCamera,
@@ -34,7 +40,7 @@ import {
 import ToastMessage, {Config} from '../../components/ToastMessage';
 import {useAth} from '../../hooks/auth';
 import {data} from '../History/data';
-import Toast, {BaseToastProps} from 'react-native-toast-message';
+import Toast, {BaseToastProps, ErrorToast} from 'react-native-toast-message';
 import {getBottomSpace, getStatusBarHeight} from 'react-native-iphone-x-helper';
 
 export default function Profile() {
@@ -59,6 +65,20 @@ export default function Profile() {
 	}, []);
 
 	const config = {
+		error: (props: JSX.IntrinsicAttributes & BaseToastProps) => (
+			<ErrorToast
+				{...props}
+				contentContainerStyle={{paddingHorizontal: 25}}
+				text1Style={{
+					fontSize: 18,
+					fontWeight: '600',
+				}}
+				text2Style={{
+					fontSize: 12,
+					fontWeight: '400',
+				}}
+			/>
+		),
 		toastAlert: ({text1, text2}: BaseToastProps) => (
 			<ToastAlert>
 				<ButtonToast activeOpacity={0.7} onPress={handleGallery}>
@@ -90,41 +110,90 @@ export default function Profile() {
 				//uplad precisa ser o caminho correto da imagem
 				const uploadUri =
 					Platform.OS === 'ios' ? uri?.replace('file://', '') : uri;
-				if (uploadUri) {
-					setUploading(true);
-					const storage = Storage();
-					const reference = storage.ref(filename);
-					const task = reference.putFile(uploadUri);
-					task.on('state_changed', (snapshot) => {
-						setTransferred(
-							Math.round(snapshot.bytesTransferred / snapshot.totalBytes) *
-								10000
-						);
-					});
-					task.then(async () => {
-						const downLoadUrl = await Storage().ref(filename).getDownloadURL();
-						fireStore()
-							.collection(KeyFireStore.users)
-							.doc(dataUser.uid)
-							.set({
-								...dataUser,
-								photo: downLoadUrl,
-							});
-						setUploading(false);
-						setTransferred(undefined);
-						getDataUser({
-							...dataUser,
-							photo: downLoadUrl,
-						});
-					});
-					task.catch((error: Error) => console.log(error.message));
+				if (uploadUri && filename) {
+					savePhotoPerfil(filename, uploadUri);
 				}
 			}
 		}).catch((e) => console.log(e.message));
 	}
 
 	async function handleCamera() {
-		await launchCamera(options, (response) => {});
+		if (Platform.OS === 'android') {
+			try {
+				const granted = await PermissionsAndroid.request(
+					PermissionsAndroid.PERMISSIONS.CAMERA,
+					{
+						title: 'App Camera Permission',
+						message: 'App needs access to your camera ',
+						buttonNeutral: 'Ask Me Later',
+						buttonNegative: 'Cancel',
+						buttonPositive: 'OK',
+					}
+				);
+				if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+					cameraIsOk();
+				} else {
+					Toast.show({
+						type: 'error',
+						text1: 'Acesso a câmera ',
+						text2: 'Você recusou acesso câmera',
+					});
+				}
+			} catch (err) {
+				console.warn(err);
+			}
+		} else {
+			cameraIsOk();
+		}
+	}
+
+	async function cameraIsOk() {
+		await launchCamera(options, (response) => {
+			if (response.errorMessage) {
+				console.log(response.errorMessage);
+			}
+			if (response.assets) {
+				const uri = response.assets.map((it) => it.uri)[0];
+				//filename pode ser qualquer nome,e o nome do arquivo salvo
+				const filename = uri?.substring(uri.lastIndexOf('/') + 1);
+				//uplad precisa ser o caminho correto da imagem
+				const uploadUri =
+					Platform.OS === 'ios' ? uri?.replace('file://', '') : uri;
+
+				if (filename && uploadUri) {
+					savePhotoPerfil(filename, uploadUri);
+				}
+			}
+		});
+	}
+
+	async function savePhotoPerfil(filename: string, uploadUri: string) {
+		setUploading(true);
+		const storage = Storage();
+		const reference = storage.ref(filename);
+		const task = reference.putFile(uploadUri);
+		task.on('state_changed', (snapshot) => {
+			setTransferred(
+				Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000
+			);
+		});
+		task.then(async () => {
+			const downLoadUrl = await Storage().ref(filename).getDownloadURL();
+			fireStore()
+				.collection(KeyFireStore.users)
+				.doc(dataUser.uid)
+				.set({
+					...dataUser,
+					photo: downLoadUrl,
+				});
+			setUploading(false);
+			setTransferred(undefined);
+			getDataUser({
+				...dataUser,
+				photo: downLoadUrl,
+			});
+		});
+		task.catch((error: Error) => console.log(error.message));
 	}
 
 	function handleEdit() {

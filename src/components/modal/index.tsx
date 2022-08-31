@@ -55,7 +55,7 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 		//	BleManager.createBond(peripheral.id)
 		//		.then(() => console.log('Create bond with sucess'))
 		//		.catch((err) => err);
-		'entrou aqui', peripheral;
+		console.log('entrou aqui', peripheral);
 	};
 
 	const handlePeripheralSelect = async (peripheral: PeripheralProps) => {
