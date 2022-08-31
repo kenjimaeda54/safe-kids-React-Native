@@ -156,7 +156,7 @@ export default function Profile() {
 				const uri = response.assets.map((it) => it.uri)[0];
 				//filename pode ser qualquer nome,e o nome do arquivo salvo
 				const filename = uri?.substring(uri.lastIndexOf('/') + 1);
-				//uplad precisa ser o caminho correto da imagem
+				//upload precisa ser o caminho correto da imagem
 				const uploadUri =
 					Platform.OS === 'ios' ? uri?.replace('file://', '') : uri;
 

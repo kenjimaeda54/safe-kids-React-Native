@@ -7,7 +7,6 @@ export const Container = styled.View`
 	padding: ${getStatusBarHeight() + 27}px 13px;
 	align-items: center;
 	background-color: ${({theme}) => theme.colors.primary};
-	padding: 15px 0px;
 `;
 
 export const Content = styled.View`
