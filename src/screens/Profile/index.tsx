@@ -60,6 +60,7 @@ export default function Profile() {
 
 	async function handleImgProfile() {
 		await launchImageLibrary(options, (response) => {
+			console.log('esta entrando aqui');
 			if (response.assets) {
 				const uri = response.assets.map((it) => it.uri)[0];
 				//filename pode ser qualquer nome,e o nome do arquivo salvo
@@ -138,7 +139,7 @@ export default function Profile() {
 		<Container>
 			<ButtonBack disabled={uploading} />
 			<Content>
-				<TouchableWithoutFeedback onPress={handleImgProfile}>
+				<TouchableOpacity activeOpacity={0.7} onPress={handleImgProfile}>
 					{dataUser.photo && !uploading ? (
 						<Image
 							source={{uri: dataUser.photo}}
@@ -164,7 +165,7 @@ export default function Profile() {
 							}}
 						/>
 					)}
-				</TouchableWithoutFeedback>
+				</TouchableOpacity>
 				<Title>Clique na foto para alterar o perfil</Title>
 			</Content>
 			<Perfil>Perfil</Perfil>

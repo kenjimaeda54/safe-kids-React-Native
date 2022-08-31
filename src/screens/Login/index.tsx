@@ -78,6 +78,7 @@ export default function Login() {
 						value={formEmail}
 						label='E-mail'
 						placeholder='E-mail'
+						keyboardType='email-address'
 						returnKeyType='next'
 						onSubmitEditing={() => passwordRef.current?.focus()}
 						onChangeText={setFormEmail}

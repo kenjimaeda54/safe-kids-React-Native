@@ -6,6 +6,7 @@ import React, {
 	useState,
 } from 'react';
 import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
 import fireStore from '@react-native-firebase/firestore';
 import Storage from '@react-native-firebase/storage';
 import {KeyFireStore, keyStorage} from '../utils/constants';
@@ -45,13 +46,7 @@ function Provider({children}: ProviderProps) {
 	useEffect(() => {
 		//listener para garantir sempre logado
 		auth().onAuthStateChanged(async (userState) => {
-			//reautenticar usuário
-			const emailCredential = auth.EmailAuthProvider.credential(
-				dataUser.email,
-				dataUser.password
-			);
-			auth().currentUser?.reauthenticateWithCredential(emailCredential);
-			//listener para garantir atualização da coleção no banco
+			//para reautenticar e necessário verificar se realmente possui email e password
 			fireStore()
 				.collection(KeyFireStore.users)
 				.doc(userState?.uid)
@@ -63,8 +58,17 @@ function Provider({children}: ProviderProps) {
 						uid: querySnapshot.data()?.uid,
 						photo: querySnapshot.data()?.photo,
 					});
+					setIsAnonymous(userState?.isAnonymous);
 				});
-			setIsAnonymous(userState?.isAnonymous);
+			if (dataUser.email && dataUser.password) {
+				//reautenticar usuário
+				const emailCredential = auth.EmailAuthProvider.credential(
+					dataUser.email,
+					dataUser.password
+				);
+				auth().currentUser?.reauthenticateWithCredential(emailCredential);
+				//listener para garantir atualização da coleção no banco
+			}
 		});
 	}, []);
 

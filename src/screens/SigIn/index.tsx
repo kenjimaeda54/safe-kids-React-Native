@@ -103,6 +103,7 @@ export default function SigIn() {
 					value={formEmail}
 					onChangeText={setFormEmail}
 					label='E-mail'
+					keyboardType='email-address'
 					placeholder='Email'
 					returnKeyType='next'
 					onSubmitEditing={() => passwordRef.current?.focus()}
