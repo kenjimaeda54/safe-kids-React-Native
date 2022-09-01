@@ -1,21 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, TextInput, TouchableOpacity} from 'react-native';
+import {Image, TextInput, TouchableOpacity, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
 import fireStore from '@react-native-firebase/firestore';
 import CustomButton from '../../components/Button';
 import ButtonBack from '../../components/ButtonBack';
 import InputCommon from '../../components/Input';
-import {
-	Container,
-	Title,
-	Underline,
-	ContainerInput,
-	Footer,
-	UnderlineFooter,
-	FooterImg,
-	LabelFooter,
-	FooterUnderline,
-} from './styles';
+import {Container, Title, Underline, ContainerInput} from './styles';
 import ToastMessage, {Config} from '../../components/ToastMessage';
 import {useAth} from '../../hooks/auth';
 import {KeyFireStore} from '../../utils/constants';
@@ -84,43 +74,48 @@ export default function SigIn() {
 
 	return (
 		<Container>
-			<ButtonBack />
-			<Title>Safe Kids</Title>
-			<Underline />
-			<ContainerInput>
-				<InputCommon
-					ref={nameRef}
-					value={formName}
-					label='Nome'
-					maxLength={15}
-					placeholder='Nome'
-					onChangeText={setFormName}
-					returnKeyType='next'
-					onSubmitEditing={() => emailRef.current?.focus()}
-				/>
-				<InputCommon
-					ref={emailRef}
-					value={formEmail}
-					onChangeText={setFormEmail}
-					label='E-mail'
-					keyboardType='email-address'
-					placeholder='Email'
-					returnKeyType='next'
-					onSubmitEditing={() => passwordRef.current?.focus()}
-				/>
-				<InputCommon
-					ref={passwordRef}
-					value={formPassword}
-					onChangeText={setFormPassword}
-					label='Senha'
-					haveIcon
-					onPress={handleIcon}
-					isSecureEntry={isPassword}
-					secureTextEntry={isPassword}
-					placeholder='Senha'
-					returnKeyType='done'
-				/>
-			</ContainerInput>
+			<View
+				style={{
+					width: '100%',
+				}}>
+				<ButtonBack />
+				<Title>Safe Kids</Title>
+				<Underline />
+				<ContainerInput>
+					<InputCommon
+						ref={nameRef}
+						value={formName}
+						label='Nome'
+						maxLength={15}
+						placeholder='Nome'
+						onChangeText={setFormName}
+						returnKeyType='next'
+						onSubmitEditing={() => emailRef.current?.focus()}
+					/>
+					<InputCommon
+						ref={emailRef}
+						value={formEmail}
+						onChangeText={setFormEmail}
+						label='E-mail'
+						keyboardType='email-address'
+						placeholder='Email'
+						returnKeyType='next'
+						onSubmitEditing={() => passwordRef.current?.focus()}
+					/>
+					<InputCommon
+						ref={passwordRef}
+						value={formPassword}
+						onChangeText={setFormPassword}
+						label='Senha'
+						haveIcon
+						onPress={handleIcon}
+						isSecureEntry={isPassword}
+						secureTextEntry={isPassword}
+						placeholder='Senha'
+						returnKeyType='done'
+					/>
+				</ContainerInput>
+			</View>
 			<CustomButton
 				isLoading={isLoading}
 				disabled={disable}
@@ -128,22 +123,6 @@ export default function SigIn() {
 				title='Entrar'
 				opacityDisable={disable}
 			/>
-			<Footer>
-				<FooterUnderline>
-					<UnderlineFooter />
-					<LabelFooter>Ou</LabelFooter>
-					<UnderlineFooter />
-				</FooterUnderline>
-				<FooterImg>
-					<Image
-						style={{
-							marginRight: 95,
-						}}
-						source={require('../../assets/apple-icon.png')}
-					/>
-					<Image source={require('../../assets/gmail-icon.png')} />
-				</FooterImg>
-			</Footer>
 			{toastConfig.type && <ToastMessage config={toastConfig} />}
 		</Container>
 	);
