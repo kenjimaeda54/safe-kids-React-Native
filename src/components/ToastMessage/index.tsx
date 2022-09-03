@@ -35,7 +35,7 @@ export default function ToastMessage({config}: ToastProps) {
 					fontWeight: '600',
 				}}
 				text2Style={{
-					fontSize: 25,
+					fontSize: 15,
 					fontWeight: '400',
 				}}
 			/>
@@ -50,7 +50,7 @@ export default function ToastMessage({config}: ToastProps) {
 					fontWeight: '600',
 				}}
 				text2Style={{
-					fontSize: 25,
+					fontSize: 15,
 					fontWeight: '400',
 				}}
 			/>
