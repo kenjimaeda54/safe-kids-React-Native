@@ -6,10 +6,9 @@ import React, {
 	useState,
 } from 'react';
 import auth from '@react-native-firebase/auth';
-import firebase from '@react-native-firebase/app';
 import fireStore from '@react-native-firebase/firestore';
-import Storage from '@react-native-firebase/storage';
 import {KeyFireStore, keyStorage} from '../utils/constants';
+import BleManager from 'react-native-ble-manager';
 
 interface ProviderProps {
 	children: ReactNode;
@@ -44,6 +43,9 @@ function Provider({children}: ProviderProps) {
 	const getDataUser = (data: DataUser) => setDataUser(data);
 
 	useEffect(() => {
+		BleManager.getConnectedPeripherals([]).then((peripheralsArray) => {
+			console.log(peripheralsArray, 'conected');
+		});
 		//listener para garantir sempre logado
 		auth().onAuthStateChanged(async (userState) => {
 			//para reautenticar e necessário verificar se realmente possui email e password

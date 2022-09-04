@@ -1,7 +1,6 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {Alert as Warning} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import {NativeModules, NativeEventEmitter, View} from 'react-native';
+import {View} from 'react-native';
 import BleManager from 'react-native-ble-manager';
 import {forwardRef} from 'react';
 import {useTheme} from 'styled-components';
@@ -21,6 +20,7 @@ import {
 } from './styles';
 import {useAth} from '../../hooks/auth';
 import {KeyFireStore} from '../../utils/constants';
+import ToastMessage, {Config} from '../ToastMessage';
 
 interface ListBluetoothProps {
 	peripherals: PeripheralProps[];
@@ -33,44 +33,70 @@ interface ListBluetoothProps {
 //	status: number;
 //};
 
-type Blecharacteristic = {
-	characteristic: string;
-	service: string;
-};
-
 const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
 > = ({peripherals, searchingBluetooth, statesBluetooth, ...rest}, ref) => {
-	const BleManagerModule = NativeModules.BleManager;
-	const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
+	const {colors} = useTheme();
 	const {dataUser} = useAth();
 	const [peripheral, setPeripheral] = useState<PeripheralProps[]>([]);
 	const [isConnected, setIsConnected] = useState(false);
 	const [tryConnect, setTryConnect] = useState(false);
-	const [listId, setListId] = useState<string[]>([]);
-	const {colors} = useTheme();
-
-	const handleConnectPeripheral = (peripheral: string) => {
-		//	BleManager.createBond(peripheral.id)
-		//		.then(() => console.log('Create bond with sucess'))
-		//		.catch((err) => err);
-		console.log('entrou aqui', peripheral);
-	};
+	const [peripheralSelectedId, setPeripheralSelectedId] = useState('');
+	const [toastConfig, setToastConfig] = useState({} as Config);
 
 	const handlePeripheralSelect = async (peripheral: PeripheralProps) => {
 		try {
-			Warning.alert(
-				'Warning',
-				'This feature is development,moment is unavailable',
-				[
-					{
-						text: 'Cancel',
-						style: 'cancel',
-					},
-				]
-			);
-			return;
+			setPeripheralSelectedId(peripheral.id);
+			setTryConnect(true);
+			BleManager.connect(peripheral.id)
+				.then(() => {
+					FireStore()
+						.collection(KeyFireStore.users)
+						.doc(dataUser.uid)
+						.get()
+						.then((snapshot) => {
+							if (snapshot.exists) {
+								const newDevice = {
+									id: peripheral.id,
+									name: peripheral.name,
+									status: true,
+								};
+								const data = snapshot.data()?.historyDevices
+									? [...snapshot.data()?.historyDevices, newDevice]
+									: [newDevice];
+								FireStore()
+									.collection(KeyFireStore.users)
+									.doc(dataUser.uid)
+									.set({
+										email: dataUser.email,
+										password: dataUser.password,
+										uid: dataUser.uid,
+										photo: dataUser.photo,
+										name: dataUser.name,
+										historyDevices: data,
+									})
+									.then(() => {
+										setIsConnected(true);
+									})
+									.catch((error) => {
+										console.log(error.message);
+									});
+							}
+						});
+				})
+				.catch((error) => {
+					console.log('Connection error', error);
+					setToastConfig({
+						type: 'error',
+						text1: 'Erro',
+						text2: 'Não conseguimos conectar ao bluetooth',
+					});
+				})
+				.finally(() => {
+					setTryConnect(false);
+					setToastConfig({} as Config);
+				});
 		} catch (err) {
 			console.log('erro', err);
 			console.log(err);
@@ -78,50 +104,18 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 	};
 
 	useEffect(() => {
-		peripherals.filter((peripheral) => {
-			if (
-				peripheral.advertising.isConnectable === true &&
-				!listId.includes(peripheral.id)
-			) {
-				//aqui vai ficar conexão com firestore e pulseiras encontradas
-				setListId((previous) => [...previous, peripheral.id]);
-				setPeripheral((previous) => [...previous, peripheral]);
-				FireStore()
-					.collection(KeyFireStore.users)
-					.doc(dataUser.uid)
-					.get()
-					.then((snapshot) => {
-						if (snapshot.exists) {
-							const uid = `${Math.random() * Number.MAX_VALUE}+${
-								Math.random() * 1000
-							}`;
-							const newDevice = {
-								id: uid,
-								name: peripheral.name,
-								status: true,
-							};
-							const data = snapshot.data()?.historyDevices
-								? [...snapshot.data()?.historyDevices, newDevice]
-								: [newDevice];
-							FireStore()
-								.collection(KeyFireStore.users)
-								.doc(dataUser.uid)
-								.set({
-									email: dataUser.email,
-									password: dataUser.password,
-									uid: dataUser.uid,
-									photo: dataUser.photo,
-									name: dataUser.name,
-									historyDevices: data,
-								})
-								.catch((error) => {
-									console.log(error.message);
-								});
-						}
-					});
-				return peripheral;
+		const setPeripheralsAll = new Set();
+		const peripheralsNotRepeated = peripherals.filter((peripheral) => {
+			const peripheralDuplicate = setPeripheralsAll.has(peripheral.id);
+			setPeripheralsAll.add(peripheral.id);
+			return !peripheralDuplicate;
+		});
+		const allConnected = peripheralsNotRepeated.filter((it) => {
+			if (it.advertising.isConnectable) {
+				return it;
 			}
 		});
+		setPeripheral(allConnected);
 	}, [setPeripheral, peripherals]);
 
 	return (
@@ -158,12 +152,13 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 										Nome: <ColorSubtitle>{peripheral.name}</ColorSubtitle>
 									</Subtitle>
 									<ContainerStatus>
-										{tryConnect ? (
+										{tryConnect && peripheralSelectedId === peripheral.id ? (
 											<Subtitle>Conectando</Subtitle>
 										) : (
 											<Subtitle>
 												Status:{' '}
-												{isConnected ? (
+												{isConnected &&
+												peripheralSelectedId === peripheral.id ? (
 													<ColorSubtitle>Conectado</ColorSubtitle>
 												) : (
 													<ColorSubtitle>Desconectado</ColorSubtitle>
@@ -183,6 +178,9 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 						</Subtitle>
 					)}
 				</View>
+				{Object.keys(toastConfig).length > 0 && (
+					<ToastMessage config={toastConfig} />
+				)}
 			</Container>
 		</Modalize>
 	);

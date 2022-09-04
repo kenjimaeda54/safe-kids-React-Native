@@ -25,7 +25,7 @@ import {
 	Name,
 } from './styles';
 import {PeripheralProps} from '../../types';
-import ListBluetooth from '../../components/Modal';
+import ListBluetooth from '../../components/ListBluetooth';
 import {KeyRoutesApp} from '../../utils/constants';
 import {useAth} from '../../hooks/auth';
 
@@ -76,7 +76,7 @@ export default function Home() {
 
 	const handleDiscoverPeripheral = (peripheral: PeripheralProps) => {
 		if (!peripheral.name) {
-			peripheral.name = 'NO NAME';
+			peripheral.name = 'Desconhecido';
 		}
 		setalPeripherals((prevState) => [...prevState, peripheral]);
 	};
