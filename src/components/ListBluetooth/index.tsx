@@ -28,11 +28,6 @@ interface ListBluetoothProps {
 	searchingBluetooth: boolean;
 }
 
-//type BleDisconnectProps = {
-//	peripheral: string;
-//	status: number;
-//};
-
 const ListBluetooth: React.ForwardRefRenderFunction<
 	Modalize,
 	ListBluetoothProps
