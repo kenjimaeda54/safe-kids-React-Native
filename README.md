@@ -11,9 +11,9 @@ Caso  sai do alcance sera alertado pelo celular que perdeu a localização. </br
 Desta forma criança não conseguira distanciar dos pais ou responsáveis
 
 ## Onde consigo o apk para android?
-Ao lado direito você pode clicar em Releases depois Assets.
-[Tambem pode usar este link](https://we.tl/t-Kss1vcNN0Q)</br>
-Gera o download e instala no celular</br>
+Ao lado direito você pode clicar em Releases depois Assets. </br>
+[Também pode usar este link](https://we.tl/t-Kss1vcNN0Q)</br>
+Apos fazer o download instala no celular</br>
 Nossas releases estarão ao longo desenvolvimento sempre estão disponíveis no github
 
  Atenção
