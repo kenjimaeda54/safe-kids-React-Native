@@ -39,6 +39,7 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 	const [tryConnect, setTryConnect] = useState(false);
 	const [peripheralSelectedId, setPeripheralSelectedId] = useState('');
 	const [toastConfig, setToastConfig] = useState({} as Config);
+	const [haveError, setHaveError] = useState(false);
 
 	const handlePeripheralSelect = async (peripheral: PeripheralProps) => {
 		try {
@@ -82,6 +83,7 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 				})
 				.catch((error) => {
 					console.log('Connection error', error);
+					setHaveError(true);
 					setToastConfig({
 						type: 'error',
 						text1: 'Erro',
@@ -91,6 +93,7 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 				.finally(() => {
 					setTryConnect(false);
 					setToastConfig({} as Config);
+					setHaveError(false);
 				});
 		} catch (err) {
 			console.log('erro', err);
@@ -173,9 +176,8 @@ const ListBluetooth: React.ForwardRefRenderFunction<
 						</Subtitle>
 					)}
 				</View>
-				{Object.keys(toastConfig).length > 0 && (
-					<ToastMessage config={toastConfig} />
-				)}
+				{toastConfig.type ||
+					(haveError && <ToastMessage config={toastConfig} />)}
 			</Container>
 		</Modalize>
 	);

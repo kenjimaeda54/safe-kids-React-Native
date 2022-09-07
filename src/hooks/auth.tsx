@@ -43,9 +43,6 @@ function Provider({children}: ProviderProps) {
 	const getDataUser = (data: DataUser) => setDataUser(data);
 
 	useEffect(() => {
-		BleManager.getConnectedPeripherals([]).then((peripheralsArray) => {
-			console.log(peripheralsArray, 'conected');
-		});
 		//listener para garantir sempre logado
 		auth().onAuthStateChanged(async (userState) => {
 			//para reautenticar e necessário verificar se realmente possui email e password
