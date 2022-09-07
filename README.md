@@ -21,12 +21,12 @@ Precisa liberar uso de  aplicativos  fora da loja da play store </br>
 [Click aqui para saber como fazer isso](https://www.cnet.com/tech/mobile/how-to-install-apps-outside-of-google-play/)
 
 
-##
+
 ## Onde consigo o IPA para IOS?
 Para criarmos um IPA precisamos de conta desenvolvimento pela Apple</br>
 Colabore com projeto!
 
-
+##
 ## Como trabalhar no modo desenvolvimento?
 - Fork ou clone o projeto 
 - Instale as dependências com o gerenciador de pacotes,npm,yarn ou algo de sua preferência 
