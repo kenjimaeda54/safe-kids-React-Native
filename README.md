@@ -1,4 +1,4 @@
-# Watch children
+# Safe Kids
 Aplicativo para monitoramento de crianças via sofwtare e pulseira BLE
 
 ## Motivação
@@ -12,13 +12,17 @@ Desta forma criança não conseguira distanciar dos pais ou responsáveis
 
 ## Onde consigo o apk para android?
 Ao lado direito você pode clicar em Releases depois Assets.
- [Posivelmente este link vai direcionar](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/releases)</br>
+[Tambem pode usar este link](https://we.tl/t-Kss1vcNN0Q)</br>
 Gera o download e instala no celular</br>
 Nossas releases estarão ao longo desenvolvimento sempre estão disponíveis no github
 
+## Onde consigo o IPA para IOS?
+Para criarmos um IPA precisamos de conta desenvolvimento pela Apple</br>
+Colabore com projeto!
+
 
 ### Atenção
-Precisa liberar  aplicativos fora da loja da play store </br>
+Precisa liberar uso de  aplicativos  fora da loja da play store </br>
 [Click aqui para saber como fazer isso](https://www.cnet.com/tech/mobile/how-to-install-apps-outside-of-google-play/)
 
 ##
@@ -32,7 +36,7 @@ Precisa liberar  aplicativos fora da loja da play store </br>
 
 ##
 ## Como funciona o app
-- Tela inicial e subjetiva, ideá e apenas orientar os próximos passos a seguir
+- Tela inicial e subjetiva, idea e apenas orientar os próximos passos a seguir
  ![WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg)](https://github.com/kenjimaeda54/watch_childrenV2-React-Native/blob/develop/github_assets/WhatsApp%20Image%202022-04-16%20at%2020.28.54(1).jpeg)
 ##
 - Modal como as pulseiras  disponíveis, neste modal as pulseiras que serão futuramente construídas para o aplicativo estarão  aqui
