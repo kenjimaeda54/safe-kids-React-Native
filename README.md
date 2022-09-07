@@ -26,7 +26,7 @@ Precisa liberar uso de  aplicativos  fora da loja da play store </br>
 Para criarmos um IPA precisamos de conta desenvolvimento pela Apple</br>
 Colabore com projeto!
 
-##
+
 ## Como trabalhar no modo desenvolvimento?
 - Fork ou clone o projeto 
 - Instale as dependências com o gerenciador de pacotes,npm,yarn ou algo de sua preferência 
