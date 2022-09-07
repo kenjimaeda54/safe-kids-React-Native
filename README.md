@@ -20,7 +20,6 @@ Nossas releases estarão ao longo desenvolvimento sempre estão disponíveis no 
 Precisa liberar uso de  aplicativos  fora da loja da play store </br>
 [Click aqui para saber como fazer isso](https://www.cnet.com/tech/mobile/how-to-install-apps-outside-of-google-play/)
 
-##
 
 
 ## Onde consigo o IPA para IOS?
