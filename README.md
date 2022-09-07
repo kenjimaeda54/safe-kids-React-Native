@@ -20,6 +20,7 @@ Nossas releases estarão ao longo desenvolvimento sempre estão disponíveis no 
 Para criarmos um IPA precisamos de conta desenvolvimento pela Apple</br>
 Colabore com projeto!
 
+##
 
 ### Atenção
 Precisa liberar uso de  aplicativos  fora da loja da play store </br>
