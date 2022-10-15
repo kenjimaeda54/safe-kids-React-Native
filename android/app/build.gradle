@@ -214,7 +214,13 @@ android {
         }
     }
     signingConfigs {
-        debug {
+      releaseSigningConfig {
+        storeFile rootProject.file("app/testapp.jks")
+        storePassword System.getProperty("APPCENTER_KEYSTORE_PASSWORD")
+        keyAlias System.getProperty("APPCENTER_KEY_ALIAS")
+        keyPassword System.getProperty("APPCENTER_KEY_PASSWORD")
+      }
+       debug {
             storeFile file('debug.keystore')
             storePassword 'android'
             keyAlias 'androiddebugkey'
