@@ -64,7 +64,7 @@ export default function Login() {
 	const handleIcon = () => setIsPassword((previous) => !previous);
 
 	return (
-		<Container>
+		<Container testID="register-screen">
 			<View
 				style={{
 					width: '100%',
